@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:maisound/home_page.dart';
-import 'package:maisound/home_page2.dart';
 import 'package:maisound/login_page.dart';
-// import 'package:maisound/home_page2.dart';
 import 'package:maisound/project_page.dart';
 import 'package:maisound/track_page.dart';
 
@@ -16,7 +14,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        debugShowCheckedModeBanner: false, title: 'MAISound', home: TrackPage());
+        debugShowCheckedModeBanner: false, title: 'MAISound', home: HomePage());
   }
 }
 

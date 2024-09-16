@@ -1,3 +1,4 @@
+import 'package:mongo_dart/mongo_dart.dart' as mongo;
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:maisound/project_page.dart';
@@ -16,6 +17,24 @@ class _HomePageState extends State<HomePage> {
 
   // Lista de projetos criados:
   List<String> projects = [];
+
+  // Função para salvar um projeto no MongoDB
+  Future<void> saveProjectToDatabase(String projectName) async {
+    var db = await Db.create('mongodb://cc23317:4nei7agNH9rVqeY3@maisound.0pola.mongodb.net/main?ssl=true&replicaSet=Main-shard-0&authSource=admin&retryWrites=true');
+    await db.open();
+
+    var collection = db.collection('projects');
+
+    var newProject = {
+      "_id": ObjectId(),
+      "name": projectName,
+      "createdAt": DateTime.now(),
+    };
+
+    await collection.insert(newProject);
+    await db.close();
+  }
+
 
   //Metodo da caixa de dialogo para inserir o nome do projeto:
   Future<void> _showAddProjectDialog() async {
@@ -49,11 +68,12 @@ class _HomePageState extends State<HomePage> {
               onPressed: () {
                 if (projectName != null && projectName!.isNotEmpty) {
                   setState(() {
-                    projects
-                        .add(projectName!); // Adiciona um novo projeto à lista.
+                    projects.add(projectName!); // Adiciona um novo projeto à lista.
                   });
 
                   _saveProjects(); // Salva o projeto criado.
+
+                  await saveProjectToDatabase(projectName!); // Salva no MongoDB
 
                   Navigator.of(context).pop(); // Fecha a caixa de diálogo.
                 }

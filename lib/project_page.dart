@@ -144,7 +144,14 @@ Widget _buildTopControlBar(BuildContext context) {
                       buttonSize: 40,
                       fillColor: const Color(0xFF4B4B5B),
                       icon: const Icon(Icons.crop_square, color: Colors.white, size: 24),
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => HomePage(),
+                          ),
+                        );
+                      },
                     ),
                   )),
             ],
@@ -464,8 +471,10 @@ Widget _buildTopControlBar(BuildContext context) {
                           ),
                         ),
                       ],
-
+                    )
+                  ),
                   ..._soundContainers, // List of sound containers
+                  
 
                   // Add sound container button
                   Padding(
