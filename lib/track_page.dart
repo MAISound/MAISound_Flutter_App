@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:maisound/classes/instrument.dart';
 import 'package:flutterflow_ui/flutterflow_ui.dart';
-import 'dart:async';
-
 import 'package:maisound/project_page.dart';
+import 'dart:async';
 import 'package:maisound/widget_piano.dart';
 export 'package:flutterflow_ui/flutterflow_ui.dart';
 
@@ -12,20 +11,6 @@ final Instrument instrument = Instrument();
 
 bool isPlaying = false;
 
-class Note {
-  final String noteName;
-  final double startTime;
-
-  Note({
-    required this.noteName,
-    required this.startTime,
-  });
-
-  @override
-  String toString() {
-    return "Note: $noteName, Start Time: $startTime";
-  }
-}
 
 class RecordingController {
   List<Note> recordedNotes = [];
@@ -46,6 +31,7 @@ class RecordingController {
         recordedNotes.add(Note(
           noteName: noteName,
           startTime: noteTime,
+          duration: 1,
         ));
       }
       print(isRecording);

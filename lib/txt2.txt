@@ -1,0 +1,96 @@
+import 'package:flutter/material.dart';
+import 'package:maisound/classes/globals.dart';
+import 'package:maisound/classes/instrument.dart';
+
+class InstrumentTracks extends StatefulWidget {
+  @override
+  _InstrumentTracksState createState() => _InstrumentTracksState();
+}
+
+class _InstrumentTracksState extends State<InstrumentTracks> {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      
+      children: [
+        Expanded(
+          child: ListView.builder(
+            itemCount: instruments.length,  // instruments é sua lista global
+            itemBuilder: (context, index) {
+              final instrument = instruments[index];
+              return Padding(
+                
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: Stack(
+                  children: [
+                    Material(
+                      color: instrument.color,
+                      elevation: 5,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(24),
+                      ),
+                      child: Container(
+                        height: 120,  // Aumenta o tamanho para acomodar o slider
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  instrument.name,
+                                  style: TextStyle(fontSize: 18),
+                                ),
+                              ],
+                            ),
+                            Slider(
+                              value: instrument.volume,  // A variável volume do instrumento
+                              min: 0,
+                              max: 100,
+                              divisions: 10,
+                              label: '${instrument.volume.round()}',
+                              onChanged: (newValue) {
+                                setState(() {
+                                  instrument.volume = newValue;  // Atualiza o volume
+                                });
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      top: 8,
+                      right: 8,
+                      child: IconButton(
+                        icon: Icon(Icons.close),
+                        onPressed: () {
+                          setState(() {
+                            instruments.removeAt(index);  // Remove o instrumento
+                          });
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        ),
+        // Botão de "+" no final da lista
+        IconButton(
+          icon: Icon(Icons.add),
+          iconSize: 48,
+          onPressed: () {
+            // Aqui você implementará a adição de novos instrumentos
+            print("Adicionar novo instrumento");
+            setState(() {
+              	instruments.add(Instrument());
+            });
+          },
+        ),
+      ],
+    );
+  }
+}

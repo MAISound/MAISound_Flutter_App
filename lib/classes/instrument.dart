@@ -1,64 +1,119 @@
 import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter/material.dart';
 // For rootBundle
 
+
+class Note {
+  final String noteName;
+  final double startTime;
+  final double duration;
+
+  Note({
+    required this.noteName,
+    required this.startTime,
+    required this.duration
+  });
+
+  @override
+  String toString() {
+    return "Note: $noteName, Start Time: $startTime, Duration: $duration";
+  }
+}
+
+
 class Instrument {
-  // Som de cada posição da tecla
   Map<String, String> sounds = {};
-  late AudioPlayer player;
-
-  // Checa se um caractere é um número
-  bool isNumeric(String s) {
-    if (s.isEmpty) {
-      return false;
-    }
-    try {
-      double.parse(s);
-      return true;
-    } catch (e) {
-      return false;
-    }
-  }
-
-  // Pega uma string que representa uma nota de um instrumento, e normaliza ela para um padrão
-  // O padrão é por exemplo C#5 ou A3
-  String normalizeName(String key) {
-    // String padronizada final
-    String normalKey = "";
-
-    // Se na primeira posição da tecla tem um número
-    // Quer dizer que o padrão é por exemplo 6-cs -> que vira C#6
-    if (isNumeric(key[0])) {
-      List<String> parts = key.split("-"); // Dividi a string em duas partes
-      String octave = parts[0];
-      String keyName = parts[1];
-
-      normalKey += keyName[0]; // Adiciona o nome da tecla na string normalizada
-
-      // Tira o S do nome da tecla e troca por um #
-      // Se keyName tiver tamanho 2, quer dizer que é sustenida
-      if (keyName.length == 2) {
-        normalKey += "#";
-      }
-
-      // Adiciona a oitava
-      normalKey += octave;
-    } else {
-      // Caso não seja nenhuma das opções acimas, presumimos que a string já esta correta
-      normalKey = key;
-    }
-
-    // Deixa em uppercase
-    normalKey = normalKey.toUpperCase();
-
-    return normalKey;
-  }
+  Map<String, AudioPlayer> activePlayers = {}; // Store active players for each note
+  Map<String, bool> isFadingOut = {}; // Track whether a fade-out is in progress for each note
+  double volume = 0.5;
+  String name = "Piano";
+  Color color = Color.fromARGB(255, 60, 104, 248);
+  late List tracks;
 
   Instrument() {
     loadSounds();
-    player = AudioPlayer();
   }
 
-  // Carrega os sons dos assets
+  // Toca um som de uma nota
+  void playSound(String key) async {
+    key = key.toUpperCase();
+
+    // Verifica se a nota existe
+    if (!sounds.containsKey(key)) {
+      return;
+    }
+
+    // Se a nota já está sendo tocada, não a toca novamente
+    if (activePlayers.containsKey(key)) {
+      return;
+    }
+
+    // Cria um novo AudioPlayer para tocar o som
+    AudioPlayer notePlayer = AudioPlayer();
+    
+    // Define o volume inicial
+    notePlayer.setVolume(volume);
+
+    // Toca o som usando assets
+    await notePlayer.play(AssetSource(sounds[key]!));
+    
+    // Armazena o player no map
+    activePlayers[key] = notePlayer;
+    isFadingOut[key] = false;
+
+    // Libera o recurso do player após o término da reprodução
+    notePlayer.onPlayerComplete.listen((event) {
+      activePlayers.remove(key); // Remove o player do map quando terminar
+      isFadingOut.remove(key); // Remove o flag de fade-out
+      notePlayer.dispose();
+    });
+  }
+
+  // Para o som de uma nota com fade out
+  void stopSound(String key, {Duration fadeOutDuration = const Duration(milliseconds: 500)}) async {
+    key = key.toUpperCase();
+
+    // Verifica se há um player tocando essa nota
+    if (activePlayers.containsKey(key)) {
+      AudioPlayer notePlayer = activePlayers[key]!;
+
+      // Se o fade-out já está em progresso, não inicia outro
+      if (isFadingOut.containsKey(key) && isFadingOut[key]!) {
+        return;
+      }
+
+      // Marca que o fade-out está em progresso
+      isFadingOut[key] = true;
+
+      // Gradualmente reduz o volume
+      await fadeOut(notePlayer, fadeOutDuration);
+
+      // Para o som e remove o player do map
+      await notePlayer.stop();
+      activePlayers.remove(key);
+      isFadingOut.remove(key);
+      notePlayer.dispose();
+    }
+  }
+
+  // Método para o fade out
+  Future<void> fadeOut(AudioPlayer player, Duration duration) async {
+    double initialVolume = player.volume;
+    int steps = 20; // Number of steps for fading out
+    double volumeStep = initialVolume / steps;
+    int stepDuration = (duration.inMilliseconds / steps).round();
+
+    for (int i = 0; i < steps; i++) {
+      await Future.delayed(Duration(milliseconds: stepDuration));
+      double newVolume = initialVolume - (i + 1) * volumeStep;
+      if (newVolume < 0) newVolume = 0;
+      if (player == activePlayers.values.firstWhere((p) => p == player, orElse: () => player)) {
+        await player.setVolume(newVolume);
+      }
+    }
+  }
+
+  // Carrega os sons dos assets (mesmo método que você já tem)
   Future<void> loadSounds() async {
     // Adiciona os caminhos das notas manualmente
     sounds["C1"] = "instruments/piano/3-c.wav";
@@ -121,26 +176,36 @@ class Instrument {
     sounds["A5"] = "instruments/piano/5-a.wav";
     sounds["A#5"] = "instruments/piano/5-as.wav";
     sounds["B5"] = "instruments/piano/5-b.wav";
-
-    // Adicione o restante das notas conforme necessário
-    // sounds["D#4"] = "assets/instruments/piano/ds4.wav";
-    // ...
-
-    print(sounds);
   }
 
-  // Toca um som de uma nota
-  // Recebe como parâmetro uma string representando a tecla
-  // Por exemplo "C#5" ou "c#5"
-  void playSound(String key) async {
-    key = key.toUpperCase();
+  bool isNumeric(String s) {
+    if (s.isEmpty) {
+      return false;
+    }
+    try {
+      double.parse(s);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
 
-    // Verifica se a nota existe
-    if (!sounds.containsKey(key)) {
-      return;
+  String normalizeName(String key) {
+    String normalKey = "";
+    if (isNumeric(key[0])) {
+      List<String> parts = key.split("-");
+      String octave = parts[0];
+      String keyName = parts[1];
+
+      normalKey += keyName[0];
+      if (keyName.length == 2) {
+        normalKey += "#";
+      }
+      normalKey += octave;
+    } else {
+      normalKey = key;
     }
 
-    // Toca o som usando assets
-    await player.play(AssetSource(sounds[key]!));
+    return normalKey.toUpperCase();
   }
 }

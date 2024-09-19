@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:maisound/classes/instrument.dart';
 
 class InstrumentSidebar extends StatefulWidget {
   @override
@@ -15,14 +16,15 @@ class _InstrumentSidebarState extends State<InstrumentSidebar> {
     _addInstrumentContainer("Guitar", Icons.music_note, Colors.orange);
   }
 
-  void _addInstrumentContainer(String instrumentName, IconData icon, Color color) {
+  void _addInstrumentContainer(
+      String instrumentName, IconData icon, Color color) {
     setState(() {
       _instrumentContainers.add(
         _InstrumentContainer(
-          instrumentName: instrumentName,
-          icon: icon,
-          color: color,
-        ),
+            instrumentName: instrumentName,
+            icon: icon,
+            color: color,
+            instrument: Instrument()),
       );
     });
   }
@@ -42,14 +44,16 @@ class _InstrumentSidebarState extends State<InstrumentSidebar> {
                   title: Text("Piano"),
                   onTap: () {
                     Navigator.of(context).pop();
-                    _addInstrumentContainer("Piano", Icons.music_note, Colors.blue);
+                    _addInstrumentContainer(
+                        "Piano", Icons.music_note, Colors.blue);
                   },
                 ),
                 ListTile(
                   title: Text("Violino"),
                   onTap: () {
                     Navigator.of(context).pop();
-                    _addInstrumentContainer("Violino", Icons.audiotrack, Colors.green);
+                    _addInstrumentContainer(
+                        "Violino", Icons.audiotrack, Colors.green);
                   },
                 ),
               ],
@@ -83,11 +87,13 @@ class _InstrumentContainer extends StatefulWidget {
   final String instrumentName;
   final IconData icon;
   final Color color;
+  final Instrument instrument;
 
   _InstrumentContainer({
     required this.instrumentName,
     required this.icon,
     required this.color,
+    required this.instrument,
   });
 
   @override
