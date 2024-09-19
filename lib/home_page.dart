@@ -2,6 +2,7 @@ import 'package:mongo_dart/mongo_dart.dart' as mongo;
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:maisound/project_page.dart';
+import 'package:mongo_dart/mongo_dart.dart' as mongo_dart;
 import 'package:shared_preferences/shared_preferences.dart';
 export 'package:flutterflow_ui/flutterflow_ui.dart';
 
@@ -20,13 +21,17 @@ class _HomePageState extends State<HomePage> {
 
   // Função para salvar um projeto no MongoDB
   Future<void> saveProjectToDatabase(String projectName) async {
-    var db = await Db.create('mongodb://cc23317:4nei7agNH9rVqeY3@maisound.0pola.mongodb.net/main?ssl=true&replicaSet=Main-shard-0&authSource=admin&retryWrites=true');
+    var db = await mongo.Db.create('mongodb://cc23317:4nei7agNH9rVqeY3@maisound.0pola.mongodb.net/main?ssl=true&replicaSet=Main-shard-0&authSource=admin&retryWrites=true');
     await db.open();
 
     var collection = db.collection('projects');
 
+    String generateProjectId() => mongo_dart.ObjectId().toHexString();
+    var userId = mongo_dart.ObjectId().toHexString();
+
     var newProject = {
-      "_id": ObjectId(),
+      "_id": generateProjectId(),
+      "userId": userId,
       "name": projectName,
       "createdAt": DateTime.now(),
     };
@@ -65,7 +70,7 @@ class _HomePageState extends State<HomePage> {
             ),
             ElevatedButton(
               child: Text('Create'),
-              onPressed: () {
+              onPressed: () async {
                 if (projectName != null && projectName!.isNotEmpty) {
                   setState(() {
                     projects.add(projectName!); // Adiciona um novo projeto à lista.

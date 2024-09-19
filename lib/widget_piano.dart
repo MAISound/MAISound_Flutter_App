@@ -1,5 +1,3 @@
-import 'dart:js_util';
-
 import 'package:flutter/material.dart';
 import 'package:maisound/classes/instrument.dart';
 import 'package:maisound/track_page.dart';
