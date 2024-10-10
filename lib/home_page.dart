@@ -1,4 +1,5 @@
 import 'package:maisound/cadastro_page.dart';
+import 'package:maisound/home_page.dart';
 import 'package:mongo_dart/mongo_dart.dart' as mongo;
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -7,7 +8,6 @@ import 'package:mongo_dart/mongo_dart.dart' as mongo_dart;
 import 'package:maisound/track_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'home_page.dart';
 export 'package:flutterflow_ui/flutterflow_ui.dart';
 
 class HomePage extends StatefulWidget {

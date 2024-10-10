@@ -1,12 +1,12 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'package:maisound/cadastro_page.dart';
 import 'package:maisound/classes/globals.dart';
 import 'package:maisound/project_page.dart';
 import 'package:maisound/track_page.dart';
 
-import '../home_page.dart';
 
 class ControlBarWidget extends StatefulWidget {
   const ControlBarWidget({super.key});
@@ -18,7 +18,6 @@ class ControlBarWidget extends StatefulWidget {
 class _ControlBarWidget extends State<ControlBarWidget> {
   late TextEditingController _controller;
 
-  Timer? _timer;
 
   @override
   void initState() {
@@ -28,12 +27,8 @@ class _ControlBarWidget extends State<ControlBarWidget> {
     // Add a listener to the controller
     _controller.addListener(_onTextChanged);
 
-    _timer = Timer.periodic(Duration(milliseconds: 1), (_) {
       setState(() {
-        // Atualiza o texto do tempo
-        getTextElapsedTime();
       });
-    });
 
 
   }
@@ -42,16 +37,8 @@ class _ControlBarWidget extends State<ControlBarWidget> {
   void dispose() {
     _controller.dispose();
     super.dispose();
-    _timer?.cancel();
   }
 
-  String getTextElapsedTime() {
-    return recorder.getElapsedTimeString().toString();
-  }
-  void setTextElapsedTime(double time) {
-    recorder.setElapsedTime(time);
-
-  }
 
 
   // Texto do bpm mudou
@@ -200,7 +187,6 @@ class _ControlBarWidget extends State<ControlBarWidget> {
                       setState(() {
                         playingCurrently.value = false;//SEMPRE QUE APERTAR BOTÃO DE REWIND, PAUSAR NO INICIO(isso se estiver fora da track)
                         recorder.stop();
-                        setTextElapsedTime(0.0);
                     });
                     }
                     
@@ -218,7 +204,6 @@ class _ControlBarWidget extends State<ControlBarWidget> {
                   onPressed: () {
                     setState(() {
                       playingCurrently.value = !playingCurrently.value;
-                      getTextElapsedTime();
                     });
                   },
                 ),
@@ -241,27 +226,6 @@ class _ControlBarWidget extends State<ControlBarWidget> {
 
                   },
                 ),
-
-                // Tempo
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                  child: Container(
-                    padding: const EdgeInsets.all(8.0),
-                    decoration: BoxDecoration(
-                      color: Colors.black54,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Text(
-                      getTextElapsedTime(),
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontFamily: "Courier",
-                      ),
-                    ),
-                  ),
-                ),
-
                 // BPM TEXT
                 Padding(
                   padding: const EdgeInsets.only(left: 12.0),
@@ -273,7 +237,7 @@ class _ControlBarWidget extends State<ControlBarWidget> {
                       ),
                       child: Text('BPM')),
                 ),
-
+                
                 // BPM
                 // Tempo
                 Padding(

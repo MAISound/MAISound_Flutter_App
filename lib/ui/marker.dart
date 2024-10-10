@@ -78,8 +78,11 @@ class _TimestampMarkerState extends State<TimestampMarker> {
     });
 
     super.initState();
-
+  }
   
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
   }
 
   @override

@@ -130,7 +130,7 @@ class _InstrumentTracksState extends State<InstrumentTracks>{
           children: [
             // Marcador do tempo
             Padding(
-              padding: EdgeInsets.only(left: 400),
+              padding: EdgeInsets.only(left: _isExpanded? 400 : 200,),
               child: TimestampMarker(onPositionChanged: _updateMarkerPosition, trackMarker: false),
             ),
             Expanded(
@@ -444,7 +444,7 @@ class _InstrumentTracksState extends State<InstrumentTracks>{
           ],
         ),
         Container(
-          child: recorder.playOnlyTrack.value ? SizedBox() : getLine(_markerPosition, screenHeight, 400)
+          child: recorder.playOnlyTrack.value ? SizedBox() : getLine(_markerPosition, screenHeight, _isExpanded? 400 : 200,)
           )
       ],
     );

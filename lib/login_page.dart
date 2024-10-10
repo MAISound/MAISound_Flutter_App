@@ -73,16 +73,12 @@ class _LoginPageState extends State<LoginPage> {
                   // Chama o serviço para fazer login
                   var response = await _userService.loginUser(email, password);
 
-                  if (response != null) {
-                    // Redireciona para a HomePage após o login
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (context) => HomePage()),
-                    );
-                  } else {
-                    // Lógica para tratar erro de login, como exibir uma mensagem
-                  }
-                },
+                  // Redireciona para a HomePage após o login
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => HomePage()),
+                  );
+                                },
                 child: Text('Login'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue, // Cor do botão
