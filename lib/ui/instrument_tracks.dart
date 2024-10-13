@@ -106,19 +106,37 @@ class _InstrumentTracksState extends State<InstrumentTracks>{
   //   }
   // }
 
-  // Handle adding a track to the global list
-  void _addTrackToPosition(Offset localPosition, int index, Instrument instrument) {
-    // Here, you calculate the start and end based on the position
-    // For this example, I'm setting a constant duration (end-start)
-    double start = localPosition.dx; // Starting point based on the click
-
-    setState(() {
-      Track newTrack = Track(instrument);
-      tracks.add(newTrack);
-      newTrack.startTime = start;
-      //tracks.add([newTrack, start]);
-    });
+  bool _isOverlapping(Track newTrack, List<Track> existingTracks) {
+    for (Track track in existingTracks) {
+      if ((newTrack.startTime < track.startTime + track.duration) &&
+          (newTrack.startTime + newTrack.duration > track.startTime)) {
+        // Overlap detected
+        return true;
+      }
+    }
+    return false;
   }
+
+  void _addTrackToPosition(Offset position, int instrumentIndex, Instrument instrument) {
+    setState(() {
+      double newTrackStartTime = (position.dx / snapStep).floor() * snapStep;  // Calculate the grid-aligned start time
+
+      Track newTrack = Track(instrument);
+      newTrack.startTime = newTrackStartTime;
+
+      // Check if the new track would overlap with any existing track
+      if (_isOverlapping(newTrack, tracks.where((track) => track.instrument == instrument).toList())) {
+        // If there's an overlap, don't add the new track
+        print('Cannot place track, overlap detected.');
+        return;
+      }
+
+      // If no overlap, add the new track
+      setState(() {
+        tracks.add(newTrack);
+      });
+    });
+}
 
   @override
   Widget build(BuildContext context) {
