@@ -67,7 +67,7 @@ class _ControlBarWidget extends State<ControlBarWidget> {
     builder: (context) => Positioned(
       right: 0,
       top: 0,
-      width: MediaQuery.of(context).size.width * 0.7, // Defina a largura desejada
+      width: MediaQuery.of(context).size.width * 0.3, // Defina a largura desejada
       height: MediaQuery.of(context).size.height, // Defina a altura como a tela inteira
       child: Material(
         color: Colors.transparent,
