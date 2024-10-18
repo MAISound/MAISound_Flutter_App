@@ -168,6 +168,108 @@ class _ControlBarWidget extends State<ControlBarWidget> {
             ),
 
             // Rewind, Play/Pause, Loop buttons and time indicator
+            // Row(
+            //   children: [
+            //     // Botão de voltar
+            //     FlutterFlowIconButton(
+            //       borderColor: const Color(0xFF242436),
+            //       borderRadius: 10,
+            //       borderWidth: 1,
+            //       buttonSize: 40,
+            //       fillColor: const Color(0xFF4B4B5B),
+            //       icon: const Icon(Icons.fast_rewind,
+            //           color: Colors.white, size: 24),
+            //       onPressed: () {
+            //         if (recorder.playOnlyTrack.value || inTrack) {
+            //           recorder.setTimestamp(0.0, true);
+            //         } else {
+            //           recorder.setTimestamp(0.0, false);
+            //           setState(() {
+            //             playingCurrently.value = false;//SEMPRE QUE APERTAR BOTÃO DE REWIND, PAUSAR NO INICIO(isso se estiver fora da track)
+            //             recorder.stop();
+            //         });
+            //         }
+                    
+            //       },
+            //     ),
+
+            //     // Botão de pausar
+            //     FlutterFlowIconButton(
+            //       borderColor: const Color(0xFF242436),
+            //       borderRadius: 10,
+            //       borderWidth: 1,
+            //       buttonSize: 40,
+            //       fillColor: const Color(0xFF4B4B5B),
+            //       icon: getPlayIcon(),
+            //       onPressed: () {
+            //         setState(() {
+            //           playingCurrently.value = !playingCurrently.value;
+            //         });
+            //       },
+            //     ),
+
+            //     // Botão de loop
+            //     FlutterFlowIconButton(
+            //       borderColor: const Color(0xFF242436),
+            //       borderRadius: 10,
+            //       borderWidth: 1,
+            //       buttonSize: 40,
+            //       fillColor: const Color(0xFF4B4B5B),
+            //       icon: recordingCurrently.value
+            //           ? const Icon(Icons.square, color: Colors.white, size: 24)
+            //           : const Icon(Icons.circle,
+            //               color: Colors.white, size: 24),
+            //       onPressed: () {
+            //         setState(() {
+            //           recordingCurrently.value = !recordingCurrently.value;
+            //         });
+
+            //       },
+            //     ),
+            //     // BPM TEXT
+            //     Padding(
+            //       padding: const EdgeInsets.only(left: 12.0),
+            //       child: DefaultTextStyle(
+            //           style: TextStyle(
+            //             fontSize: 16,
+            //             color: Colors.white,
+            //             fontFamily: "Courier",
+            //           ),
+            //           child: Text('BPM')),
+            //     ),
+                
+            //     // BPM
+            //     // Tempo
+            //     Padding(
+            //       padding: const EdgeInsets.symmetric(horizontal: 12.0),
+            //       child: Container(
+            //         height: 40,
+            //         width: 60,
+            //         padding: const EdgeInsets.all(8.0),
+            //         decoration: BoxDecoration(
+            //           color: Colors.black54,
+            //           borderRadius: BorderRadius.circular(10),
+            //         ),
+            //         child: TextField(
+            //           decoration: const InputDecoration(
+            //             border: InputBorder.none, // Remove the underline
+            //           ),
+            //           textAlign: TextAlign.center,
+            //           textAlignVertical: TextAlignVertical.center,
+            //           controller: _controller,
+            //           style: const TextStyle(
+            //             color: Colors.white,
+            //             fontSize: 16,
+            //             fontFamily: "Courier",
+            //           ),
+            //           keyboardType: TextInputType.number,
+            //         ),
+            //       ),
+            //     ),
+            //   ],
+            // ),
+
+            // Rewind, Play/Pause, Loop buttons and time indicator
             Row(
               children: [
                 // Botão de voltar
@@ -185,11 +287,10 @@ class _ControlBarWidget extends State<ControlBarWidget> {
                     } else {
                       recorder.setTimestamp(0.0, false);
                       setState(() {
-                        playingCurrently.value = false;//SEMPRE QUE APERTAR BOTÃO DE REWIND, PAUSAR NO INICIO(isso se estiver fora da track)
+                        playingCurrently.value = false;
                         recorder.stop();
-                    });
+                      });
                     }
-                    
                   },
                 ),
 
@@ -223,23 +324,23 @@ class _ControlBarWidget extends State<ControlBarWidget> {
                     setState(() {
                       recordingCurrently.value = !recordingCurrently.value;
                     });
-
                   },
                 ),
+
                 // BPM TEXT
                 Padding(
                   padding: const EdgeInsets.only(left: 12.0),
                   child: DefaultTextStyle(
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.white,
-                        fontFamily: "Courier",
-                      ),
-                      child: Text('BPM')),
+                    style: const TextStyle(
+                      fontSize: 16,
+                      color: Colors.white,
+                      fontFamily: "Courier",
+                    ),
+                    child: const Text('BPM'),
+                  ),
                 ),
-                
+
                 // BPM
-                // Tempo
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 12.0),
                   child: Container(
@@ -266,8 +367,26 @@ class _ControlBarWidget extends State<ControlBarWidget> {
                     ),
                   ),
                 ),
+
+                // Botão de IA (Novo)
+                FlutterFlowIconButton(
+                  borderColor: const Color(0xFF242436),
+                  borderRadius: 10,
+                  borderWidth: 1,
+                  buttonSize: 40,
+                  fillColor: const Color(0xFF4B4B5B),
+                  icon: const Icon(Icons.memory, color: Colors.white, size: 24), // Ícone de IA
+                  onPressed: () {
+                    // Ação do botão de IA
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(builder: (context) => IAPage()), // Por exemplo, abrir uma página de IA
+                    // );
+                  },
+                ),
               ],
             ),
+
           ],
         ),
       ),
