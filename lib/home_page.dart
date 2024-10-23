@@ -7,6 +7,8 @@ import 'package:maisound/project_page.dart';
 import 'package:mongo_dart/mongo_dart.dart' as mongo_dart;
 import 'package:maisound/track_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 export 'package:flutterflow_ui/flutterflow_ui.dart';
 
@@ -22,6 +24,28 @@ class _HomePageState extends State<HomePage> {
 
   // Lista de projetos criados:
   List<String> projects = [];
+
+  Future<void> saveProjectToBackend(String projectName, int bpm, List<String> instruments, List<Map<String, dynamic>> tracks) async {
+    final url = Uri.parse('http://seu-backend-url/project');
+    final body = json.encode({
+      "name": projectName,
+      "bpm": bpm,
+      "instruments": instruments,
+      "tracks": tracks,
+    });
+
+    try {
+      final response = await http.post(url, headers: {"content-Type": "application/json"}, body: body);
+
+      if (response.statusCode == 201) {
+        print('Projeto salvo com sucesso');
+      } else {
+        print('Falha ao salvar o projeto: ${response.body}');
+      }
+    } catch (error) {
+      print('Erro ao salvar o projeto: $error');
+    }
+  }
 
   // Função para salvar um projeto no MongoDB
   Future<void> saveProjectToDatabase(String projectName) async {
@@ -83,7 +107,9 @@ class _HomePageState extends State<HomePage> {
 
                   _saveProjects(); // Salva o projeto criado.
 
-                  await saveProjectToDatabase(projectName!); // Salva no MongoDB
+                  await saveProjectToBackend(projectName!, 120, ["Piano", "Drums"], []);
+
+                  await saveProjectToDatabase(projectName!);
 
                   Navigator.of(context).pop(); // Fecha a caixa de diálogo.
                 }

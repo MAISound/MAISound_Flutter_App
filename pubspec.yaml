@@ -10,22 +10,22 @@ environment:
 
 dependencies:
   fl_chart: any
-  audioplayers: ^5.2.1
-  file_picker: ^7.0.2
+  audioplayers: ^6.1.0
+  file_picker: ^8.0.7
   flutter:
     sdk: flutter
-  flutter_launcher_icons: ^0.13.1
-  flutterflow_ui: ^0.2.0+1
+  flutter_launcher_icons: ^0.14.1
+  flutterflow_ui: ^0.3.1
   font_awesome_flutter: ^10.1.0
-  google_fonts: ^4.0.3
+  google_fonts: ^6.2.1
   shared_preferences: ^2.0.15
-  mongo_dart: ^0.9.4
+  mongo_dart: ^0.10.3
   
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  flutter_lints: ^4.0.0
+  flutter_lints: ^5.0.0
 
 flutter:
   assets:
