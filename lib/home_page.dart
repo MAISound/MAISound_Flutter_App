@@ -4,11 +4,11 @@ import 'package:mongo_dart/mongo_dart.dart' as mongo;
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:maisound/project_page.dart';
-import 'package:mongo_dart/mongo_dart.dart' as mongo_dart;
 import 'package:maisound/track_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:maisound/services/user_service.dart';
 
 export 'package:flutterflow_ui/flutterflow_ui.dart';
 
@@ -25,49 +25,27 @@ class _HomePageState extends State<HomePage> {
   // Lista de projetos criados:
   List<String> projects = [];
 
-  Future<void> saveProjectToBackend(String projectName, int bpm, List<String> instruments, List<Map<String, dynamic>> tracks) async {
-    final url = Uri.parse('http://seu-backend-url/project');
-    final body = json.encode({
-      "name": projectName,
-      "bpm": bpm,
-      "instruments": instruments,
-      "tracks": tracks,
-    });
+  // // Função para salvar um projeto no MongoDB
+  // Future<void> saveProjectToDatabase(String projectName) async {
+  //   var db = await mongo.Db.create(
+  //       'mongodb://cc23317:4nei7agNH9rVqeY3@maisound.0pola.mongodb.net/main?ssl=true&replicaSet=Main-shard-0&authSource=admin&retryWrites=true');
+  //   await db.open();
 
-    try {
-      final response = await http.post(url, headers: {"content-Type": "application/json"}, body: body);
+  //   var collection = db.collection('projects');
 
-      if (response.statusCode == 201) {
-        print('Projeto salvo com sucesso');
-      } else {
-        print('Falha ao salvar o projeto: ${response.body}');
-      }
-    } catch (error) {
-      print('Erro ao salvar o projeto: $error');
-    }
-  }
+  //   String generateProjectId() => mongo_dart.ObjectId().toHexString();
+  //   var userId = mongo_dart.ObjectId().toHexString();
 
-  // Função para salvar um projeto no MongoDB
-  Future<void> saveProjectToDatabase(String projectName) async {
-    var db = await mongo.Db.create(
-        'mongodb://cc23317:4nei7agNH9rVqeY3@maisound.0pola.mongodb.net/main?ssl=true&replicaSet=Main-shard-0&authSource=admin&retryWrites=true');
-    await db.open();
+  //   var newProject = {
+  //     "_id": generateProjectId(),
+  //     "userId": userId,
+  //     "name": projectName,
+  //     "createdAt": DateTime.now(),
+  //   };
 
-    var collection = db.collection('projects');
-
-    String generateProjectId() => mongo_dart.ObjectId().toHexString();
-    var userId = mongo_dart.ObjectId().toHexString();
-
-    var newProject = {
-      "_id": generateProjectId(),
-      "userId": userId,
-      "name": projectName,
-      "createdAt": DateTime.now(),
-    };
-
-    await collection.insert(newProject);
-    await db.close();
-  }
+  //   await collection.insert(newProject);
+  //   await db.close();
+  // }
 
   //Metodo da caixa de dialogo para inserir o nome do projeto:
   Future<void> _showAddProjectDialog() async {
@@ -107,9 +85,7 @@ class _HomePageState extends State<HomePage> {
 
                   _saveProjects(); // Salva o projeto criado.
 
-                  await saveProjectToBackend(projectName!, 120, ["Piano", "Drums"], []);
-
-                  await saveProjectToDatabase(projectName!);
+                  // saveProjectToDatabase(projectName!);
 
                   Navigator.of(context).pop(); // Fecha a caixa de diálogo.
                 }
@@ -226,7 +202,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ],
                     ),
-                    
+
                     // Botão de Novo Projeto
                     Column(
                       mainAxisSize: MainAxisSize.min,
