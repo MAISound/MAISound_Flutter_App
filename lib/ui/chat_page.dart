@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:maisound/services/chat_service.dart';
 
 class ChatPage extends StatefulWidget {
   const ChatPage({Key? key}) : super(key: key);
@@ -12,20 +13,32 @@ class _ChatPageState extends State<ChatPage> {
   // Controlador para o campo de entrada de texto
   final TextEditingController _messageController = TextEditingController();
 
+  final ChatService _chatService = ChatService();
+
   // Lista de mensagens [Type, Message]
   List<Map<String, String>> messages = [
-    {'type': 'Robot', 'message': 'Olá! Eu sou o assistente de IA, como posso ajudar?'},
-    {'type': 'User', 'message': 'Eu preciso de ajuda com o meu projeto.'},
-    {'type': 'Robot', 'message': 'Claro! Me diga mais sobre o que você está tentando fazer.'},
+    {'type': 'Robot', 'message': 'Olá! Eu sou a MAI , sua assistente de IA, como posso ajudar?'},
   ];
 
   // Função para adicionar uma nova mensagem à lista
-  void _sendMessage() {
+  void _sendMessage() async {
     if (_messageController.text.isNotEmpty) {
       setState(() {
         messages.add({'type': 'User', 'message': _messageController.text});
         _messageController.clear(); // Limpa o campo de texto
       });
+
+      // Recebe mensagem
+      try {
+        var response = await _chatService.send(messages.last["message"]! + "\n" ?? "\n");
+
+        setState(() {
+          messages.add({'type': 'Robot', 'message': response["response"]});
+        });
+      } catch (e) {
+        print('Erro ao enviar mensagem: $e');
+      }
+      
     }
   }
 
