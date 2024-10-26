@@ -25,7 +25,10 @@ class _HomePageState extends State<HomePage> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   // Lista de projetos criados:
-  List<String> projects = [];
+  //List<String> projects = [];
+  // [0] = ID
+  // [1] = Name
+  List<List<String>> projects = [];
 
   ProjectService _projectService = ProjectService();
 
@@ -84,13 +87,15 @@ class _HomePageState extends State<HomePage> {
                 if (projectName != null && projectName!.isNotEmpty) {
 
                   project_name = projectName!; // Muda nome global do projeto
-                  _projectService.save();
+                              
+                  // Aguarda a confirmação de que o projeto foi salvo
+                  await _projectService.save();
 
+                  // Adiciona um pequeno atraso para garantir que o banco de dados seja atualizado
+                  await Future.delayed(Duration(milliseconds: 200));
+
+                  // Atualiza a lista de projetos após o atraso
                   fetchProjectNames();
-
-                  //_saveProjects(); // Salva o projeto criado.
-
-                  // saveProjectToDatabase(projectName!);
 
                   Navigator.of(context).pop(); // Fecha a caixa de diálogo.
                 }
@@ -120,12 +125,15 @@ class _HomePageState extends State<HomePage> {
             ),
             ElevatedButton(
               child: Text('Delete'),
-              onPressed: () {
-                setState(() {
-                  // Remover no futuro
-                  projects.removeAt(index); // Remove o projeto da lista.
-                  //_saveProjects(); // Salva os projetos Atualizados.
-                });
+              onPressed: () async {
+                await _projectService.deleteProject(projects[index][0]);
+
+                // Adiciona um pequeno atraso para garantir que o banco de dados seja atualizado
+                await Future.delayed(Duration(milliseconds: 200));
+
+                // Atualiza a lista de projetos após o atraso
+                fetchProjectNames();
+
                 Navigator.of(context).pop(); // Fecha a caixa de diálogo.
               },
             ),
@@ -145,8 +153,11 @@ class _HomePageState extends State<HomePage> {
   void fetchProjectNames() async {
     var response = await _projectService.getProjectNames();
 
+    print(response);
+
+    projects.clear();
     setState(() {
-      projects = response;
+      response.forEach((k, v) => projects.add([k, v]));
     });
   }
 
@@ -313,7 +324,8 @@ class _HomePageState extends State<HomePage> {
                             children: [
                               Center(
                                 child: Text(
-                                  projects[index],
+                                  projects[index][1],
+                                  //projects[index],
                                   style: TextStyle(
                                       color: Colors.white, fontSize: 20),
                                   textAlign: TextAlign.center,

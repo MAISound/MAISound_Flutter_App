@@ -8,9 +8,25 @@ class ProjectService {
   // URL base da API
   final String baseUrl = "http://localhost:5000";
 
-  // Recebe nome de todos projetos do usuario
-  Future<List<String>> getProjectNames() async {
+  // Deleta um projeto usando o ID dele
+  Future<void> deleteProject(String projectId) async {
+    final response = await http.delete(
+      Uri.parse('$baseUrl/api/auth/project/$projectId'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
 
+    if (response.statusCode == 200) {
+      // Projeto deletado com sucesso
+      print('Projeto deletado com sucesso');
+    } else {
+      throw Exception('Erro ao deletar o projeto: ${response.body}');
+    }
+  }
+
+  // Recebe nome de todos projetos do usuário
+  Future<Map<String, String>> getProjectNames() async {
     final response = await http.get(
       Uri.parse('$baseUrl/api/auth/project'),
       headers: <String, String>{
@@ -20,7 +36,15 @@ class ProjectService {
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = jsonDecode(response.body);
-      return List<String>.from(data['projectNames']); // Extrai e retorna apenas os nomes dos projetos
+      
+      // Converte a lista de projetos em um mapa
+      final Map<String, String> projectNames = {};
+
+      for (var project in data['projects']) {
+        projectNames[project['id']] = project['name'];
+      }
+      
+      return projectNames; // Retorna o mapa com IDs e nomes dos projetos
     } else {
       throw Exception('Erro ao receber a lista de projetos: ${response.body}');
     }
