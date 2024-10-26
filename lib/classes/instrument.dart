@@ -67,6 +67,7 @@ class Instrument {
   Map<String, String> sounds = {};
   Map<String, AudioPlayer> activePlayers = {}; // Store active players for each note
   Map<String, bool> isFadingOut = {}; // Track whether a fade-out is in progress for each note
+  InstrumentTypes type = InstrumentTypes.piano;
   double volume = 0.5;
   String name = "Generic";
   Color color = Colors.white;
@@ -87,6 +88,8 @@ class Instrument {
       name = "Piano";
       color = Color.fromARGB(255, 60, 104, 248);
     }
+    
+    this.type = type;
 
     loadSounds(type);
   }

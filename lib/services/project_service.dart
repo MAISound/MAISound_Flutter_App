@@ -88,8 +88,6 @@ void loadProjectData(Map<String, dynamic> data) {
     instruments.add(instrument);
   }
 
-  print(data);
-
   // Decodifica e cria faixas
   List<dynamic> tracksData = data["tracks"];
   for (var trackData in tracksData) {
@@ -113,6 +111,11 @@ void loadProjectData(Map<String, dynamic> data) {
     }
 
     tracks.add(track);
+  }
+
+  // Caso não tenha nenhum instrumento, adiciona um por padrão
+  if (instruments.isEmpty) {
+    instruments.add(Instrument());
   }
 }
 
