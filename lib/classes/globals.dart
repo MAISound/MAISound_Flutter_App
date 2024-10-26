@@ -10,6 +10,7 @@ String username = "user";
 
 // Config
 String project_name = "Generic";
+String current_projectId = "Generic";
 double master_volume = 0.75;
 double BPM = 130; // Influencia o quão rapido o valor de timestamp aumenta
 double timestamp =

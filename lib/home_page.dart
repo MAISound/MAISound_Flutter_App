@@ -89,7 +89,7 @@ class _HomePageState extends State<HomePage> {
                   project_name = projectName!; // Muda nome global do projeto
                               
                   // Aguarda a confirmação de que o projeto foi salvo
-                  await _projectService.save();
+                  await _projectService.create();
 
                   // Adiciona um pequeno atraso para garantir que o banco de dados seja atualizado
                   await Future.delayed(Duration(milliseconds: 200));
@@ -303,12 +303,15 @@ class _HomePageState extends State<HomePage> {
                     itemCount: projects.length,
                     itemBuilder: (context, index) {
                       return GestureDetector(
-                        onTap: () {
+                        onTap: () async {
+                          // Carrega o projeto
+                          await _projectService.loadProjectById(projects[index][0]);
+
                           Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) => ProjectPageWidget(
-                                  projectName: projects[index]),
+                                  projectName: projects[index][1]),
                             ),
                           );
                         },

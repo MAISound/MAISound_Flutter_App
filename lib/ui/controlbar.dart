@@ -5,6 +5,7 @@ import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'package:maisound/cadastro_page.dart';
 import 'package:maisound/classes/globals.dart';
 import 'package:maisound/project_page.dart';
+import 'package:maisound/services/project_service.dart';
 import 'package:maisound/track_page.dart';
 import 'package:maisound/ui/chat_page.dart';
 
@@ -20,6 +21,7 @@ class _ControlBarWidget extends State<ControlBarWidget> {
   late TextEditingController _controller;
   OverlayEntry? _chatOverlayEntry; // Mantém a referência do OverlayEntry
   bool _isChatOpen = false; // Estado para controlar se o chat está aberto
+  ProjectService _projectService = ProjectService();
 
   @override
   void initState() {
@@ -121,6 +123,35 @@ class _ControlBarWidget extends State<ControlBarWidget> {
                   fillColor: const Color(0xFF4B4B5B),
                   icon: const Icon(Icons.menu, color: Colors.white, size: 24),
                   onPressed: () {},
+                ),
+                // Salvar
+                FlutterFlowIconButton(
+                  borderColor: const Color(0xFF242436),
+                  borderRadius: 10,
+                  borderWidth: 1,
+                  buttonSize: 40,
+                  fillColor: const Color(0xFF4B4B5B),
+                  icon: const Icon(Icons.save, color: Colors.white, size: 24),
+                  onPressed: () async {
+                    try {
+                      await _projectService.save(current_projectId);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Projeto salvo com sucesso!'),
+                          backgroundColor: Colors.green,
+                          duration: Duration(seconds: 2),
+                        ),
+                      );
+                    } catch (e) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Erro ao salvar o projeto.'),
+                          backgroundColor: Colors.red,
+                          duration: Duration(seconds: 2),
+                        ),
+                      );
+                    }
+                  },
                 ),
                 FlutterFlowIconButton(
                   borderColor: const Color(0xFF242436),
