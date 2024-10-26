@@ -1,5 +1,7 @@
 import 'package:maisound/cadastro_page.dart';
+import 'package:maisound/classes/globals.dart';
 import 'package:maisound/home_page.dart';
+import 'package:maisound/services/project_service.dart';
 import 'package:mongo_dart/mongo_dart.dart' as mongo;
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -24,6 +26,8 @@ class _HomePageState extends State<HomePage> {
 
   // Lista de projetos criados:
   List<String> projects = [];
+
+  ProjectService _projectService = ProjectService();
 
   // // Função para salvar um projeto no MongoDB
   // Future<void> saveProjectToDatabase(String projectName) async {
@@ -78,12 +82,13 @@ class _HomePageState extends State<HomePage> {
               child: Text('Create'),
               onPressed: () async {
                 if (projectName != null && projectName!.isNotEmpty) {
-                  setState(() {
-                    projects
-                        .add(projectName!); // Adiciona um novo projeto à lista.
-                  });
 
-                  _saveProjects(); // Salva o projeto criado.
+                  project_name = projectName!; // Muda nome global do projeto
+                  _projectService.save();
+
+                  fetchProjectNames();
+
+                  //_saveProjects(); // Salva o projeto criado.
 
                   // saveProjectToDatabase(projectName!);
 
@@ -117,8 +122,9 @@ class _HomePageState extends State<HomePage> {
               child: Text('Delete'),
               onPressed: () {
                 setState(() {
+                  // Remover no futuro
                   projects.removeAt(index); // Remove o projeto da lista.
-                  _saveProjects(); // Salva os projetos Atualizados.
+                  //_saveProjects(); // Salva os projetos Atualizados.
                 });
                 Navigator.of(context).pop(); // Fecha a caixa de diálogo.
               },
@@ -132,21 +138,16 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    _loadProjects();
+    fetchProjectNames();
   }
 
   // Carrega os projetos salvos:
-  void _loadProjects() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      projects = prefs.getStringList('projects') ?? [];
-    });
-  }
+  void fetchProjectNames() async {
+    var response = await _projectService.getProjectNames();
 
-  // Salva os projetos:
-  void _saveProjects() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setStringList('projects', projects);
+    setState(() {
+      projects = response;
+    });
   }
 
   @override
