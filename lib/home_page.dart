@@ -167,195 +167,230 @@ class _HomePageState extends State<HomePage> {
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
         key: scaffoldKey,
-        backgroundColor: Color(0xFF303047),
-        body: SafeArea(
-          top: true,
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Botões no topo da página
-              Expanded(
-                flex: 3,
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    // Botão de Menu
-                    Column(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        FlutterFlowIconButton(
-                          borderRadius: 20,
-                          borderWidth: 1,
-                          buttonSize: 80,
-                          fillColor: Color.fromRGBO(18, 18, 23, 0.9),
-                          hoverColor: Color.fromRGBO(18, 18, 23, 0.6),
-                          hoverIconColor: Colors.white,
-                          icon: FaIcon(
-                            FontAwesomeIcons.bars,
-                            color: Colors.white,
-                            size: 30,
-                          ),
-                          onPressed: () {
-                            print('MenuButton pressed ...');
-                          },
-                        ),
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
-                          child: Text(
-                            'Menu',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ),
-                      ],
-                    ),
-
-                    // Botão de Novo Projeto
-                    Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        FlutterFlowIconButton(
-                          borderRadius: 20,
-                          borderWidth: 1,
-                          buttonSize: 80,
-                          fillColor: Color.fromRGBO(18, 18, 23, 0.9),
-                          hoverColor: Color.fromRGBO(18, 18, 23, 0.6),
-                          hoverIconColor: Colors.white,
-                          icon: FaIcon(
-                            FontAwesomeIcons.plus,
-                            color: Colors.white,
-                            size: 30,
-                          ),
-                          onPressed: () {
-                            setState(() {
-                              // Abre a caixa de dialogo para inserir o nome do projeto.
-                              _showAddProjectDialog();
-                            });
-                          },
-                        ),
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
-                          child: Text(
-                            'New Project',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ),
-                      ],
-                    ),
-                    // Botão de Carregar Projeto
-                    Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        FlutterFlowIconButton(
-                          borderRadius: 20,
-                          borderWidth: 1,
-                          buttonSize: 80,
-                          fillColor: Color.fromRGBO(18, 18, 23, 0.9),
-                          hoverColor: Color.fromRGBO(18, 18, 23, 0.6),
-                          hoverIconColor: Colors.white,
-                          icon: Icon(
-                            Icons.upload_file,
-                            color: Colors.white,
-                            size: 30,
-                          ),
-                          onPressed: () {
-                            print('Load Project button pressed...');
-                          },
-                        ),
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
-                          child: Text(
-                            'Load Project',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ].divide(SizedBox(width: 106)),
+        
+        body: Stack(
+          children: [
+            // Imagem de fundo
+            Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('assets/images/playing_piano.jpg'), // Caminho da imagem
+                  fit: BoxFit.cover, // Ajusta a imagem para cobrir todo o espaço
                 ),
               ),
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Container(
-                    width: MediaQuery.sizeOf(context).width,
-                    height: 10,
-                    decoration: BoxDecoration(
-                      color: Color(0xFF090C1E),
-                    ),
-                  ),
-                ],
+            ),
+
+            // Gradiente sobre a imagem
+            Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    Color(0xFF303047).withOpacity(0.97), // Cor inicial do degradê com opacidade
+                    Color(0xFF1D1D26).withOpacity(0.97), // Cor final do degradê com opacidade
+                  ],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                ),
               ),
+            ),
+          
+          
+          SafeArea(
+            top: true,
+            child: Column(
+              
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
 
-              // Lista de Projetos Criados
-              Expanded(
-                flex: 2,
-                child: Scrollbar(
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: projects.length,
-                    itemBuilder: (context, index) {
-                      return GestureDetector(
-                        onTap: () async {
-                          // Carrega o projeto
-                          await _projectService.loadProjectById(projects[index][0]);
-
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ProjectPageWidget(
-                                  projectName: projects[index][1]),
+              children: [
+                // Botões no topo da página
+                Expanded(
+                  flex: 3,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      // Botão de Menu
+                      Column(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          FlutterFlowIconButton(
+                            borderRadius: 20,
+                            borderWidth: 1,
+                            buttonSize: 80,
+                            fillColor: Color.fromRGBO(18, 18, 23, 0.9),
+                            hoverColor: Color.fromRGBO(18, 18, 23, 0.6),
+                            hoverIconColor: Colors.white,
+                            icon: FaIcon(
+                              FontAwesomeIcons.bars,
+                              color: Colors.white,
+                              size: 30,
                             ),
-                          );
-                        },
-                        child: Container(
-                          width: MediaQuery.sizeOf(context).width * 0.3,
-                          height: MediaQuery.sizeOf(context).width * 0.3,
-                          margin: EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                            color: Color(0xFF14141C),
-                            borderRadius: BorderRadius.circular(20),
+                            onPressed: () {
+                              print('MenuButton pressed ...');
+                            },
                           ),
-                          child: Stack(
-                            children: [
-                              Center(
-                                child: Text(
-                                  projects[index][1],
-                                  //projects[index],
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 20),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                              Positioned(
-                                top: 14,
-                                right: 14,
-                                child: IconButton(
-                                  icon: Icon(Icons.delete, color: Colors.red),
-                                  onPressed: () {
-                                    _showDeleteConfirmationDialog(index);
-                                  },
-                                ),
-                              ),
-                            ],
+                          Padding(
+                            padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
+                            child: Text(
+                              'Menu',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(color: Colors.white),
+                            ),
                           ),
-                        ),
-                      );
-                    },
+                        ],
+                      ),
+
+                      // Botão de Novo Projeto
+                      Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          FlutterFlowIconButton(
+                            borderRadius: 20,
+                            borderWidth: 1,
+                            buttonSize: 80,
+                            fillColor: Color.fromRGBO(18, 18, 23, 0.9),
+                            hoverColor: Color.fromRGBO(18, 18, 23, 0.6),
+                            hoverIconColor: Colors.white,
+                            icon: FaIcon(
+                              FontAwesomeIcons.plus,
+                              color: Colors.white,
+                              size: 30,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                // Abre a caixa de dialogo para inserir o nome do projeto.
+                                _showAddProjectDialog();
+                              });
+                            },
+                          ),
+                          Padding(
+                            padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
+                            child: Text(
+                              'New Project',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        ],
+                      ),
+                      // Botão de Carregar Projeto
+                      Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          FlutterFlowIconButton(
+                            borderRadius: 20,
+                            borderWidth: 1,
+                            buttonSize: 80,
+                            fillColor: Color.fromRGBO(18, 18, 23, 0.9),
+                            hoverColor: Color.fromRGBO(18, 18, 23, 0.6),
+                            hoverIconColor: Colors.white,
+                            icon: Icon(
+                              Icons.upload_file,
+                              color: Colors.white,
+                              size: 30,
+                            ),
+                            onPressed: () {
+                              print('Load Project button pressed...');
+                            },
+                          ),
+                          Padding(
+                            padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
+                            child: Text(
+                              'Load Project',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ].divide(SizedBox(width: 106)),
                   ),
                 ),
-              ),
-            ],
+                
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Container(
+                      width: MediaQuery.sizeOf(context).width,
+                      height: 10,
+                      decoration: BoxDecoration(
+                        color: Color(0xFF090C1E),
+                      ),
+                    ),
+                  ],
+                ),
+
+                Expanded(
+                  
+                  // Projetos
+                  // Lista de Projetos Criados
+                  
+                  flex: 2,
+                  
+                  child: Scrollbar(
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: projects.length,
+                      itemBuilder: (context, index) {
+                        return GestureDetector(
+                          onTap: () async {
+                            // Carrega o projeto
+                            await _projectService.loadProjectById(projects[index][0]);
+
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ProjectPageWidget(
+                                    projectName: projects[index][1]),
+                              ),
+                            );
+                          },
+                          child: Container(
+                            width: MediaQuery.sizeOf(context).width * 0.3,
+                            height: MediaQuery.sizeOf(context).width * 0.3,
+                            margin: EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              color: Color(0xFF14141C),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Stack(
+                              children: [
+                                Center(
+                                  child: Text(
+                                    projects[index][1],
+                                    //projects[index],
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 20),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                                Positioned(
+                                  top: 14,
+                                  right: 14,
+                                  child: IconButton(
+                                    icon: Icon(Icons.delete, color: Colors.red),
+                                    onPressed: () {
+                                      _showDeleteConfirmationDialog(index);
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
-      ),
+        ]),
+      )
     );
   }
 }
