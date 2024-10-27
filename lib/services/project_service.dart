@@ -66,7 +66,7 @@ void loadProjectData(Map<String, dynamic> data) {
   // Configurações do projeto
   project_name = data["name"];
   current_projectId = data["_id"];
-  BPM = data["bpm"];
+  BPM = data["bpm"]+0.0;
 
   // Limpa listas de instrumentos e faixas atuais
   instruments.clear();

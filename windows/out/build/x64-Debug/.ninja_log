@@ -1,0 +1,52 @@
+# ninja log v5
+23	15767	7514942220342124	C:/Users/dudac/OneDrive/Documentos/JOAO COTUCA/2024/tcc/MAISound_Flutter_App/windows/flutter/ephemeral/flutter_windows.dll	e49937ba2a6d5268
+23	15767	7514942220342124	C:/Users/dudac/OneDrive/Documentos/JOAO COTUCA/2024/tcc/MAISound_Flutter_App/windows/flutter/ephemeral/flutter_windows.h	e49937ba2a6d5268
+23	15767	7514942220342124	C:/Users/dudac/OneDrive/Documentos/JOAO COTUCA/2024/tcc/MAISound_Flutter_App/windows/flutter/ephemeral/cpp_client_wrapper/flutter_view_controller.cc	e49937ba2a6d5268
+23	15767	7514942220342124	C:/Users/dudac/OneDrive/Documentos/JOAO COTUCA/2024/tcc/MAISound_Flutter_App/windows/flutter/ephemeral/cpp_client_wrapper/flutter_engine.cc	e49937ba2a6d5268
+23	15767	7514942220342124	C:/Users/dudac/OneDrive/Documentos/JOAO COTUCA/2024/tcc/MAISound_Flutter_App/windows/flutter/ephemeral/flutter_export.h	e49937ba2a6d5268
+23	15767	7514942220342124	C:/Users/dudac/OneDrive/Documentos/JOAO COTUCA/2024/tcc/MAISound_Flutter_App/windows/flutter/ephemeral/cpp_client_wrapper/core_implementations.cc	e49937ba2a6d5268
+23	15767	7514942220342124	C:/Users/dudac/OneDrive/Documentos/JOAO COTUCA/2024/tcc/MAISound_Flutter_App/windows/flutter/ephemeral/flutter_plugin_registrar.h	e49937ba2a6d5268
+23	15767	7514942220342124	C:/Users/dudac/OneDrive/Documentos/JOAO COTUCA/2024/tcc/MAISound_Flutter_App/windows/flutter/ephemeral/flutter_messenger.h	e49937ba2a6d5268
+23	15767	7514942220342124	C:/Users/dudac/OneDrive/Documentos/JOAO COTUCA/2024/tcc/MAISound_Flutter_App/windows/flutter/ephemeral/cpp_client_wrapper/standard_codec.cc	e49937ba2a6d5268
+23	15767	7514942220342124	C:/Users/dudac/OneDrive/Documentos/JOAO COTUCA/2024/tcc/MAISound_Flutter_App/windows/flutter/ephemeral/flutter_texture_registrar.h	e49937ba2a6d5268
+17	14689	7514942220342124	C:/Users/dudac/OneDrive/Documentos/JOAO COTUCA/2024/tcc/maisound_flutter_app/windows/flutter/ephemeral/flutter_messenger.h	8d2c2f1fb7b2efc9
+23	15767	7514942220342124	C:/Users/dudac/OneDrive/Documentos/JOAO COTUCA/2024/tcc/MAISound_Flutter_App/windows/flutter/ephemeral/cpp_client_wrapper/plugin_registrar.cc	e49937ba2a6d5268
+17	14689	7514942220342124	flutter/_phony_	8d2c2f1fb7b2efc9
+17	14689	7514942220342124	C:/Users/dudac/OneDrive/Documentos/JOAO COTUCA/2024/tcc/maisound_flutter_app/windows/flutter/ephemeral/flutter_windows.dll	8d2c2f1fb7b2efc9
+17	14689	7514942220342124	C:/Users/dudac/OneDrive/Documentos/JOAO COTUCA/2024/tcc/maisound_flutter_app/windows/flutter/ephemeral/flutter_export.h	8d2c2f1fb7b2efc9
+17	14689	7514942220342124	C:/Users/dudac/OneDrive/Documentos/JOAO COTUCA/2024/tcc/maisound_flutter_app/windows/flutter/ephemeral/flutter_plugin_registrar.h	8d2c2f1fb7b2efc9
+17	14689	7514942220342124	C:/Users/dudac/OneDrive/Documentos/JOAO COTUCA/2024/tcc/maisound_flutter_app/windows/flutter/ephemeral/flutter_windows.h	8d2c2f1fb7b2efc9
+17	14689	7514942220342124	C:/Users/dudac/OneDrive/Documentos/JOAO COTUCA/2024/tcc/maisound_flutter_app/windows/flutter/ephemeral/flutter_texture_registrar.h	8d2c2f1fb7b2efc9
+17	14689	7514942220342124	C:/Users/dudac/OneDrive/Documentos/JOAO COTUCA/2024/tcc/maisound_flutter_app/windows/flutter/ephemeral/cpp_client_wrapper/core_implementations.cc	8d2c2f1fb7b2efc9
+17	14689	7514942220342124	C:/Users/dudac/OneDrive/Documentos/JOAO COTUCA/2024/tcc/maisound_flutter_app/windows/flutter/ephemeral/cpp_client_wrapper/standard_codec.cc	8d2c2f1fb7b2efc9
+17	14689	7514942220342124	C:/Users/dudac/OneDrive/Documentos/JOAO COTUCA/2024/tcc/maisound_flutter_app/windows/flutter/ephemeral/cpp_client_wrapper/plugin_registrar.cc	8d2c2f1fb7b2efc9
+17	14689	7514942220342124	C:/Users/dudac/OneDrive/Documentos/JOAO COTUCA/2024/tcc/maisound_flutter_app/windows/flutter/ephemeral/cpp_client_wrapper/flutter_engine.cc	8d2c2f1fb7b2efc9
+17	14689	7514942220342124	C:/Users/dudac/OneDrive/Documentos/JOAO COTUCA/2024/tcc/maisound_flutter_app/windows/flutter/ephemeral/cpp_client_wrapper/flutter_view_controller.cc	8d2c2f1fb7b2efc9
+17	14689	7514942220342124	C:/Users/dudac/OneDrive/Documentos/JOAO COTUCA/2024/tcc/maisound_flutter_app/windows/out/build/x64-Debug/flutter/_phony_	8d2c2f1fb7b2efc9
+16	2670	7517062580130389	build.ninja	b599b1797342e298
+42	15205	7514942220342124	C:/Users/dudac/OneDrive/Documentos/JOAO COTUCA/2024/tcc/maisound_flutter_app/windows/flutter/ephemeral/flutter_windows.dll	8d2c2f1fb7b2efc9
+42	15205	7514942220342124	C:/Users/dudac/OneDrive/Documentos/JOAO COTUCA/2024/tcc/maisound_flutter_app/windows/flutter/ephemeral/flutter_export.h	8d2c2f1fb7b2efc9
+42	15205	7514942220342124	C:/Users/dudac/OneDrive/Documentos/JOAO COTUCA/2024/tcc/maisound_flutter_app/windows/flutter/ephemeral/flutter_windows.h	8d2c2f1fb7b2efc9
+42	15205	7514942220342124	C:/Users/dudac/OneDrive/Documentos/JOAO COTUCA/2024/tcc/maisound_flutter_app/windows/flutter/ephemeral/flutter_messenger.h	8d2c2f1fb7b2efc9
+42	15205	7514942220342124	C:/Users/dudac/OneDrive/Documentos/JOAO COTUCA/2024/tcc/maisound_flutter_app/windows/flutter/ephemeral/flutter_plugin_registrar.h	8d2c2f1fb7b2efc9
+42	15205	7514942220342124	C:/Users/dudac/OneDrive/Documentos/JOAO COTUCA/2024/tcc/maisound_flutter_app/windows/flutter/ephemeral/flutter_texture_registrar.h	8d2c2f1fb7b2efc9
+42	15205	7514942220342124	C:/Users/dudac/OneDrive/Documentos/JOAO COTUCA/2024/tcc/maisound_flutter_app/windows/flutter/ephemeral/cpp_client_wrapper/core_implementations.cc	8d2c2f1fb7b2efc9
+42	15205	7514942220342124	C:/Users/dudac/OneDrive/Documentos/JOAO COTUCA/2024/tcc/maisound_flutter_app/windows/flutter/ephemeral/cpp_client_wrapper/standard_codec.cc	8d2c2f1fb7b2efc9
+42	15205	7514942220342124	C:/Users/dudac/OneDrive/Documentos/JOAO COTUCA/2024/tcc/maisound_flutter_app/windows/flutter/ephemeral/cpp_client_wrapper/plugin_registrar.cc	8d2c2f1fb7b2efc9
+42	15205	7514942220342124	C:/Users/dudac/OneDrive/Documentos/JOAO COTUCA/2024/tcc/maisound_flutter_app/windows/flutter/ephemeral/cpp_client_wrapper/flutter_engine.cc	8d2c2f1fb7b2efc9
+42	15205	7514942220342124	C:/Users/dudac/OneDrive/Documentos/JOAO COTUCA/2024/tcc/maisound_flutter_app/windows/flutter/ephemeral/cpp_client_wrapper/flutter_view_controller.cc	8d2c2f1fb7b2efc9
+42	15205	7514942220342124	flutter/_phony_	8d2c2f1fb7b2efc9
+42	15205	7514942220342124	C:/Users/dudac/OneDrive/Documentos/JOAO COTUCA/2024/tcc/maisound_flutter_app/windows/out/build/x64-Debug/flutter/_phony_	8d2c2f1fb7b2efc9
+15258	19225	7517062773800128	runner/CMakeFiles/musicbenchai.dir/flutter_window.cpp.obj	4b5d78a16b845285
+15272	19282	7517062773800128	runner/CMakeFiles/musicbenchai.dir/utils.cpp.obj	3b4c52320e0edbcc
+15265	19293	7517062774268916	runner/CMakeFiles/musicbenchai.dir/main.cpp.obj	729f587eb119ff4
+15221	19481	7517062774268916	flutter/CMakeFiles/flutter_wrapper_plugin.dir/ephemeral/cpp_client_wrapper/plugin_registrar.cc.obj	c3cd652b3e6b2c2f
+15241	19493	7517062774893883	flutter/CMakeFiles/flutter_wrapper_app.dir/ephemeral/cpp_client_wrapper/flutter_engine.cc.obj	b89add87403e09e5
+15250	19533	7517062775206354	flutter/CMakeFiles/flutter_wrapper_app.dir/ephemeral/cpp_client_wrapper/flutter_view_controller.cc.obj	a35128c68762c475
+15207	19559	7517062775831388	flutter/CMakeFiles/flutter_wrapper_plugin.dir/ephemeral/cpp_client_wrapper/core_implementations.cc.obj	9ac940844f4b0b24
+15227	19576	7517062775987637	flutter/CMakeFiles/flutter_wrapper_app.dir/ephemeral/cpp_client_wrapper/core_implementations.cc.obj	e36eebf1a744642a
+15233	19901	7517062780235300	flutter/CMakeFiles/flutter_wrapper_app.dir/ephemeral/cpp_client_wrapper/standard_codec.cc.obj	5ca1f34347739caa
+15214	20096	7517062781998610	flutter/CMakeFiles/flutter_wrapper_plugin.dir/ephemeral/cpp_client_wrapper/standard_codec.cc.obj	d9f350a99e639183
+19293	20137	7517062782894220	runner/CMakeFiles/musicbenchai.dir/Runner.rc.res	53f2591ce03c605e
+19282	20498	7517062787161560	runner/CMakeFiles/musicbenchai.dir/__/flutter/generated_plugin_registrant.cc.obj	d7419c22ffa3473e
+19228	21276	7517062794937550	runner/CMakeFiles/musicbenchai.dir/win32_window.cpp.obj	6d621bcfecc63f7c

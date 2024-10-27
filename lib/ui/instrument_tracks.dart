@@ -21,41 +21,38 @@ class _InstrumentTracksState extends State<InstrumentTracks>{
 
   bool _isExpanded = true;
 
+  // Métodos para os listeners
+  void _onCurrentTimestampChanged() {
+    setState(() {
+      _updateMarkerPosition(recorder.getTimestamp(false));
+    });
+  }
+
+  void _onPlayOnlyTrackChanged() {
+    setState(() {
+      // A lógica que você deseja quando playOnlyTrack mudar
+    });
+  }
+
   void _updateMarkerPosition(double newPosition) {
     setState(() {
       _markerPosition = newPosition;
     });
   }
+  
 
   @override
   void initState() {
-    recorder.currentTimestamp.addListener(() {
-      //_markerPosition = recorder.currentProjectTimestamp.value;
-      //_markerPosition = recorder.getTimestamp(false);
-
-      setState(() {
-        _updateMarkerPosition(recorder.getTimestamp(false));
-      });
-    });
-
-    recorder.playOnlyTrack.addListener(() {
-      setState(() {
-      });
-    });
-
-    _isExpanded = true;
-
-    // recorder.playOnlyTrack.addListener(() {
-    //   setState(() {
-        
-    //   });
-    // });
-
     super.initState();
+    recorder.currentTimestamp.addListener(_onCurrentTimestampChanged);
+    recorder.playOnlyTrack.addListener(_onPlayOnlyTrackChanged);
+  }
 
-    setState(() {
-       _updateMarkerPosition(recorder.getTimestamp(false));
-    });
+  @override
+  void dispose(){
+    recorder.currentTimestamp.removeListener(_onCurrentTimestampChanged);
+    recorder.playOnlyTrack.removeListener(_onPlayOnlyTrackChanged);
+    super.dispose();
   }
 
   // Notes that are being played currently

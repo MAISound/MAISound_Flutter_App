@@ -99,7 +99,7 @@ class _ControlBarWidget extends State<ControlBarWidget> {
     return Align(
       alignment: AlignmentDirectional(0, 0),
       child: Container(
-        height: 100,
+        height: 70,
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             colors: [Color(0xFF1D1D25), Color(0xFF0E0E15)],
@@ -241,6 +241,12 @@ class _ControlBarWidget extends State<ControlBarWidget> {
               icon: const Icon(Icons.memory, color: Colors.white, size: 24),
               onPressed: _toggleChat, // Abre ou fecha o chat
             ),
+
+            Row(
+              children:[
+                
+              ]
+            )
           ],
         ),
       ),

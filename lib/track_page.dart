@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:flutter/material.dart';
 import 'package:maisound/classes/globals.dart';
 import 'package:maisound/classes/instrument.dart';
@@ -32,7 +30,6 @@ class _TrackPageWidgetState extends State<TrackPageWidget> {
 
     //recorder.setTrack(track);
     // Prevent default event handler
-    document.onContextMenu.listen((event) => event.preventDefault());
   }
 
   @override

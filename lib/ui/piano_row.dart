@@ -129,6 +129,9 @@ class _PianoRowWidgetState extends State<PianoRowWidget> {
 
   @override
   void dispose() {
+    recorder.currentTimestamp.removeListener(() {
+      _markerPosition = recorder.getTimestamp(true);
+    });
     super.dispose();
   }
 

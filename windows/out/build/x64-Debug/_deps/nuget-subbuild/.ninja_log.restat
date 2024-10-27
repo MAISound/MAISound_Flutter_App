@@ -1,0 +1,37 @@
+# ninja log v5
+697	784	7517057604260325	C:/Users/dudac/OneDrive/Documentos/JOAO COTUCA/2024/tcc/maisound_flutter_app/windows/out/build/x64-Debug/_deps/nuget-subbuild/nuget-populate-prefix/src/nuget-populate-stamp/nuget-populate-done	9bfbd53679f6a92a
+14	88	7517057597294973	nuget-populate-prefix/src/nuget-populate-stamp/nuget-populate-mkdir	1c6ee0d17065f3f7
+42	133	7517062563921702	nuget-populate-prefix/src/nuget-populate-stamp/nuget-populate-update	8342d8f9907b439b
+5	108	7516866662800979	C:/Users/dudac/OneDrive/Documentos/JOAO COTUCA/2024/tcc/MAISound_Flutter_App/windows/out/build/x64-Debug/_deps/nuget-subbuild/nuget-populate-prefix/src/nuget-populate-stamp/nuget-populate-mkdir	a628dcf6f92b9823
+88	231	7517057598604072	nuget-populate-prefix/src/nuget-populate-stamp/nuget-populate-download	1974ef0b2526d1be
+3121	3220	7516866693903130	C:/Users/dudac/OneDrive/Documentos/JOAO COTUCA/2024/tcc/MAISound_Flutter_App/windows/out/build/x64-Debug/_deps/nuget-subbuild/nuget-populate-prefix/src/nuget-populate-stamp/nuget-populate-patch	eba5fc01f772bd11
+3012	3121	7516866692900580	C:/Users/dudac/OneDrive/Documentos/JOAO COTUCA/2024/tcc/MAISound_Flutter_App/windows/out/build/x64-Debug/_deps/nuget-subbuild/nuget-populate-prefix/src/nuget-populate-stamp/nuget-populate-update	886434e869480e87
+133	196	7517062564568315	nuget-populate-prefix/src/nuget-populate-stamp/nuget-populate-patch	e8e94175435a0c42
+109	3011	7516866691817245	C:/Users/dudac/OneDrive/Documentos/JOAO COTUCA/2024/tcc/MAISound_Flutter_App/windows/out/build/x64-Debug/_deps/nuget-subbuild/nuget-populate-prefix/src/nuget-populate-stamp/nuget-populate-download	5cf85588b83030ec
+196	282	7517062564568315	nuget-populate-prefix/src/nuget-populate-stamp/nuget-populate-copyfile	3d40e5c907db2245
+3367	3477	7516866696403998	C:/Users/dudac/OneDrive/Documentos/JOAO COTUCA/2024/tcc/MAISound_Flutter_App/windows/out/build/x64-Debug/_deps/nuget-subbuild/nuget-populate-prefix/src/nuget-populate-stamp/nuget-populate-configure	c96cc0d0b7b4f321
+3220	3366	7516866695404545	C:/Users/dudac/OneDrive/Documentos/JOAO COTUCA/2024/tcc/MAISound_Flutter_App/windows/out/build/x64-Debug/_deps/nuget-src/nuget.exe	978e6657b9f7bf99
+282	344	7517062566038234	C:/Users/dudac/OneDrive/Documentos/JOAO COTUCA/2024/tcc/maisound_flutter_app/windows/out/build/x64-Debug/_deps/nuget-subbuild/nuget-populate-prefix/src/nuget-populate-stamp/nuget-populate-configure	e53acb085be5667
+3220	3366	7516866695404545	C:/Users/dudac/OneDrive/Documentos/JOAO COTUCA/2024/tcc/MAISound_Flutter_App/windows/out/build/x64-Debug/_deps/nuget-subbuild/nuget-populate-prefix/src/nuget-populate-stamp/nuget-populate-copyfile	978e6657b9f7bf99
+282	344	7517062566038234	nuget-populate-prefix/src/nuget-populate-stamp/nuget-populate-configure	e53acb085be5667
+344	405	7517062566661548	nuget-populate-prefix/src/nuget-populate-stamp/nuget-populate-build	a928a8931b6a3ff
+3477	3585	7516866697559421	C:/Users/dudac/OneDrive/Documentos/JOAO COTUCA/2024/tcc/MAISound_Flutter_App/windows/out/build/x64-Debug/_deps/nuget-subbuild/nuget-populate-prefix/src/nuget-populate-stamp/nuget-populate-build	c4303486da3db71f
+405	478	7517062567368513	nuget-populate-prefix/src/nuget-populate-stamp/nuget-populate-install	9d956c4af31bff0c
+3585	3680	7516866698521353	C:/Users/dudac/OneDrive/Documentos/JOAO COTUCA/2024/tcc/MAISound_Flutter_App/windows/out/build/x64-Debug/_deps/nuget-subbuild/nuget-populate-prefix/src/nuget-populate-stamp/nuget-populate-install	2988dcb6a2166842
+634	697	7517057603350800	nuget-populate-prefix/src/nuget-populate-stamp/nuget-populate-test	832dd54a4faf95f0
+3681	3769	7516866699448619	C:/Users/dudac/OneDrive/Documentos/JOAO COTUCA/2024/tcc/MAISound_Flutter_App/windows/out/build/x64-Debug/_deps/nuget-subbuild/nuget-populate-prefix/src/nuget-populate-stamp/nuget-populate-test	fad65d617876c21f
+14	88	7517057597294973	C:/Users/dudac/OneDrive/Documentos/JOAO COTUCA/2024/tcc/maisound_flutter_app/windows/out/build/x64-Debug/_deps/nuget-subbuild/nuget-populate-prefix/src/nuget-populate-stamp/nuget-populate-mkdir	1c6ee0d17065f3f7
+8	222	7517062567336885	build.ninja	556dcf9f5981e905
+697	784	7517057604260325	CMakeFiles/nuget-populate-complete	9bfbd53679f6a92a
+697	784	7517057604260325	nuget-populate-prefix/src/nuget-populate-stamp/nuget-populate-done	9bfbd53679f6a92a
+3770	3897	7516866700705498	C:/Users/dudac/OneDrive/Documentos/JOAO COTUCA/2024/tcc/MAISound_Flutter_App/windows/out/build/x64-Debug/_deps/nuget-subbuild/CMakeFiles/nuget-populate-complete	8dd3c3d1267a551e
+3770	3897	7516866700705498	C:/Users/dudac/OneDrive/Documentos/JOAO COTUCA/2024/tcc/MAISound_Flutter_App/windows/out/build/x64-Debug/_deps/nuget-subbuild/nuget-populate-prefix/src/nuget-populate-stamp/nuget-populate-done	8dd3c3d1267a551e
+196	282	7517062564568315	C:/Users/dudac/OneDrive/Documentos/JOAO COTUCA/2024/tcc/maisound_flutter_app/windows/out/build/x64-Debug/_deps/nuget-src/nuget.exe	3d40e5c907db2245
+88	231	7517057598604072	C:/Users/dudac/OneDrive/Documentos/JOAO COTUCA/2024/tcc/maisound_flutter_app/windows/out/build/x64-Debug/_deps/nuget-subbuild/nuget-populate-prefix/src/nuget-populate-stamp/nuget-populate-download	1974ef0b2526d1be
+42	133	7517062563921702	C:/Users/dudac/OneDrive/Documentos/JOAO COTUCA/2024/tcc/maisound_flutter_app/windows/out/build/x64-Debug/_deps/nuget-subbuild/nuget-populate-prefix/src/nuget-populate-stamp/nuget-populate-update	8342d8f9907b439b
+697	784	7517057604260325	C:/Users/dudac/OneDrive/Documentos/JOAO COTUCA/2024/tcc/maisound_flutter_app/windows/out/build/x64-Debug/_deps/nuget-subbuild/CMakeFiles/nuget-populate-complete	9bfbd53679f6a92a
+133	196	7517062564568315	C:/Users/dudac/OneDrive/Documentos/JOAO COTUCA/2024/tcc/maisound_flutter_app/windows/out/build/x64-Debug/_deps/nuget-subbuild/nuget-populate-prefix/src/nuget-populate-stamp/nuget-populate-patch	e8e94175435a0c42
+196	282	7517062564568315	C:/Users/dudac/OneDrive/Documentos/JOAO COTUCA/2024/tcc/maisound_flutter_app/windows/out/build/x64-Debug/_deps/nuget-subbuild/nuget-populate-prefix/src/nuget-populate-stamp/nuget-populate-copyfile	3d40e5c907db2245
+344	405	7517062566661548	C:/Users/dudac/OneDrive/Documentos/JOAO COTUCA/2024/tcc/maisound_flutter_app/windows/out/build/x64-Debug/_deps/nuget-subbuild/nuget-populate-prefix/src/nuget-populate-stamp/nuget-populate-build	a928a8931b6a3ff
+405	478	7517062567368513	C:/Users/dudac/OneDrive/Documentos/JOAO COTUCA/2024/tcc/maisound_flutter_app/windows/out/build/x64-Debug/_deps/nuget-subbuild/nuget-populate-prefix/src/nuget-populate-stamp/nuget-populate-install	9d956c4af31bff0c
+634	697	7517057603350800	C:/Users/dudac/OneDrive/Documentos/JOAO COTUCA/2024/tcc/maisound_flutter_app/windows/out/build/x64-Debug/_deps/nuget-subbuild/nuget-populate-prefix/src/nuget-populate-stamp/nuget-populate-test	832dd54a4faf95f0
