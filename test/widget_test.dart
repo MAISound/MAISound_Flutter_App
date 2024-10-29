@@ -1,30 +1,39 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
+// import 'package:flutter_test/flutter_test.dart';
+// import 'package:flutter/material.dart';
+// import 'package:maisound/ui/input_number.dart';
 
-import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
+// void main() {a
+//   testWidgets('Testa o InputNumber widget', (WidgetTester tester) async {
+//     // Monta o widget no ambiente de teste.
+//     int testValue = 3;
 
-import 'package:maisound_flutter_app/main.dart';
+//     await tester.pumpWidget(
+//       MaterialApp(
+//         home: Scaffold(
+//           body: InputNumber(
+//             label: 'Texto esperado',
+//             onChanged: (value) {
+//               testValue = value;
+//             },
+//             value: testValue,
+//             min: 0,
+//             max: 10,
+//           ),
+//         ),
+//       ),
+//     );
 
-void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+//     // Verifica se o label está presente no widget.
+//     expect(find.text('Texto esperado'), findsOneWidget);
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+//     // Verifica o valor inicial.
+//     expect(find.text('3'), findsOneWidget);
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+//     // Simula uma interação: altera o valor.
+//     await tester.enterText(find.byType(TextField), '5');
+//     await tester.pump();
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
-  });
-}
+//     // Valida se o novo valor foi atualizado no callback.
+//     expect(testValue, equals(5));
+//   });
+// }

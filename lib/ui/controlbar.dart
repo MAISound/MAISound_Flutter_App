@@ -8,6 +8,7 @@ import 'package:maisound/project_page.dart';
 import 'package:maisound/services/project_service.dart';
 import 'package:maisound/track_page.dart';
 import 'package:maisound/ui/chat_page.dart';
+import 'package:maisound/ui/input_number.dart';
 
 
 class ControlBarWidget extends StatefulWidget {
@@ -241,12 +242,26 @@ class _ControlBarWidget extends State<ControlBarWidget> {
               icon: const Icon(Icons.memory, color: Colors.white, size: 24),
               onPressed: _toggleChat, // Abre ou fecha o chat
             ),
+            SizedBox(
+              width: 70, // Ajustar a largura do slider
+              child: InputNumber(label: "BPM", onChanged: (new_value)=> BPM = new_value.toDouble(),
+               value: BPM.toInt(), min: 50, max: 300)
+            ),
 
             Row(
-              children:[
-                
-              ]
+              children: [
+                Text(
+                  'BPM',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                  ),
+                ),
+              ],
+
             )
+
+            
           ],
         ),
       ),
