@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:maisound/home_page.dart';
-import './services/user_service.dart';
-import 'package:maisound/cadastro_page.dart';
+import 'services/user_service.dart';
+import 'cadastro_page.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -13,33 +13,67 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _passwordController = TextEditingController();
 
   final UserService _userService = UserService();
+  bool _isLoading = false;
+  String? _errorMessage;
 
   void _login() async {
+    setState(() {
+      _isLoading = true;
+      _errorMessage = null;
+    });
+
+    final email = _emailController.text.trim();
+    final password = _passwordController.text.trim();
+
+    if (email.isEmpty || password.isEmpty) {
+      setState(() {
+        _isLoading = false;
+        _errorMessage = 'Preencha todos os campos';
+      });
+      return;
+    }
+
     try {
-      var response = await _userService.loginUser(
-        _emailController.text,
-        _passwordController.text,
-      );
-      print('Usuário logado: $response');
-      // Aqui você pode salvar o token e navegar para outra página
+      final token = await _userService.loginUser(email, password);
+      if (token != null) {
+        // Login bem-sucedido, redireciona para a HomePage
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => HomePage()),
+        );
+      } else {
+        setState(() {
+          _errorMessage = 'Email ou senha incorretos';
+        });
+      }
     } catch (e) {
-      print('Erro ao fazer login: $e');
+      setState(() {
+        _errorMessage = 'Erro ao fazer login';
+      });
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF333441), // Cor de fundo
+      backgroundColor: const Color(0xFF333441),
       body: Center(
-        child: Container(
+        child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 24.0),
-          width: double.infinity, // Para ocupar toda a largura
-          constraints: BoxConstraints(maxWidth: 400), // Limitar a largura
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Campos de texto e botão de login aqui
+              if (_errorMessage != null) ...[
+                Text(
+                  _errorMessage!,
+                  style: TextStyle(color: Colors.red),
+                ),
+                SizedBox(height: 16),
+              ],
               TextField(
                 controller: _emailController,
                 decoration: InputDecoration(
@@ -54,6 +88,7 @@ class _LoginPageState extends State<LoginPage> {
               SizedBox(height: 16.0),
               TextField(
                 controller: _passwordController,
+                obscureText: true,
                 decoration: InputDecoration(
                   hintText: 'Password',
                   filled: true,
@@ -62,34 +97,22 @@ class _LoginPageState extends State<LoginPage> {
                     borderRadius: BorderRadius.circular(12.0),
                   ),
                 ),
-                obscureText: true,
               ),
               SizedBox(height: 24.0),
               ElevatedButton(
-                onPressed: () async {
-                  String email = _emailController.text;
-                  String password = _passwordController.text;
-
-                  // Chama o serviço para fazer login
-                  var response = await _userService.loginUser(email, password);
-
-                  // Redireciona para a HomePage após o login
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => HomePage()),
-                  );
-                                },
-                child: Text('Login'),
+                onPressed: _isLoading ? null : _login,
+                child: _isLoading
+                    ? CircularProgressIndicator()
+                    : Text('Login'),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue, // Cor do botão
-                  padding: EdgeInsets.symmetric(vertical: 14.0),
+                  backgroundColor: Colors.blue,
+                  padding: const EdgeInsets.symmetric(vertical: 14.0),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12.0),
                   ),
                 ),
               ),
               SizedBox(height: 16.0),
-              // Link para Cadastro
               GestureDetector(
                 onTap: () {
                   Navigator.push(
@@ -97,7 +120,7 @@ class _LoginPageState extends State<LoginPage> {
                     MaterialPageRoute(builder: (context) => CadastroPage()),
                   );
                 },
-                child: Text(
+                child: const Text(
                   "Não tem cadastro? Crie uma conta",
                   style: TextStyle(
                     color: Colors.blue,

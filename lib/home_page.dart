@@ -1,16 +1,11 @@
-import 'package:maisound/cadastro_page.dart';
 import 'package:maisound/classes/globals.dart';
 import 'package:maisound/home_page.dart';
 import 'package:maisound/services/project_service.dart';
-import 'package:mongo_dart/mongo_dart.dart' as mongo;
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:maisound/project_page.dart';
-import 'package:maisound/track_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-import 'package:maisound/services/user_service.dart';
+import 'package:maisound/login_page.dart'; 
 
 export 'package:flutterflow_ui/flutterflow_ui.dart';
 
@@ -24,13 +19,44 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
-  // Lista de projetos criados:
-  //List<String> projects = [];
-  // [0] = ID
-  // [1] = Name
+  ProjectService _projectService = ProjectService();
   List<List<String>> projects = [];
 
-  ProjectService _projectService = ProjectService();
+  String? userIconPath;
+  String? userImage = 'assets/images/default_user.png';
+  bool isLoggedIn = false;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchProjectNames();
+    checkUserStatus();
+  }
+
+  // Função para verificar se o usuário está logado usando SharedPreferences
+  Future<void> checkUserStatus() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
+      userIconPath = prefs.getString('userIconPath') ?? 'assets/images/default_user.png';
+    });
+  }
+
+  //Função para salvar o ícone escolhido pelo usuário
+  Future<void> saveUserIcon(String iconPath) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('userIconPath', iconPath);
+    setState(() {
+      userIconPath = iconPath;
+    });
+  }
+
+  void updateUserStatus(bool loggedIn, String? imagePath) {
+    setState(() {
+      isLoggedIn = loggedIn;
+      userIconPath = imagePath;
+    });
+  }
 
   // // Função para salvar um projeto no MongoDB
   // Future<void> saveProjectToDatabase(String projectName) async {
@@ -143,12 +169,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  @override
-  void initState() {
-    super.initState();
-    fetchProjectNames();
-  }
-
   // Carrega os projetos salvos:
   void fetchProjectNames() async {
     var response = await _projectService.getProjectNames();
@@ -167,7 +187,6 @@ class _HomePageState extends State<HomePage> {
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
         key: scaffoldKey,
-        
         body: Stack(
           children: [
             // Imagem de fundo
@@ -198,13 +217,66 @@ class _HomePageState extends State<HomePage> {
           SafeArea(
             top: true,
             child: Column(
-              
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
-
               children: [
-                // Botões no topo da página
+                // Ícone de Perfil (Login/Logout)
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: GestureDetector(
+                      onTap: () {
+                        if (isLoggedIn) {
+                          // Redireciona para a página do perfil -> fazer
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => HomePage(), // Vai para a home page
+                            ),
+                          );
+                        } else {
+                          // Redireciona para a página de login
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => LoginPage(),
+                            ),
+                          );
+                        }
+                      },
+                      child: Container(
+                        width: 80,
+                        height: 80,
+                        decoration: BoxDecoration(
+                          color: Color.fromRGBO(18, 18, 23, 0.9),
+                          shape: BoxShape.circle,
+                        ),
+                        child: Center(
+                          child: isLoggedIn && userImage != null
+                              ? ClipOval(
+                                  child: Image.asset(
+                                    userImage!,
+                                    fit: BoxFit.cover,
+                                    width: 70,
+                                    height: 70,
+                                  ),
+                                )
+                              : Icon(
+                                  Icons.person,
+                                  color: Colors.white,
+                                  size: 40,
+                                ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+
+                SizedBox(height: 10), // Espaçamento abaixo do ícone de perfil
+
+                // Botões 
                 Expanded(
                   flex: 3,
                   child: Row(
@@ -241,8 +313,7 @@ class _HomePageState extends State<HomePage> {
                               style: TextStyle(color: Colors.white),
                             ),
                           ),
-                        ],
-                      ),
+                                    
 
                       // Botão de Novo Projeto
                       Column(
@@ -309,7 +380,9 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ].divide(SizedBox(width: 106)),
                   ),
-                ),
+                ],
+              ),
+            ),
                 
                 Row(
                   mainAxisSize: MainAxisSize.max,
@@ -389,8 +462,9 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
           ),
-        ]),
-      )
-    );
-  }
+        ],
+      ),
+    ),
+  );
+}
 }

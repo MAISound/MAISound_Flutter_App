@@ -32,5 +32,6 @@ flutter:
       - assets/instruments/piano/
       - assets/instruments/bass/
       - assets/images/
+      - assets/images/default_user.png
 
   uses-material-design: true
