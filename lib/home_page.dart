@@ -22,7 +22,7 @@ class _HomePageState extends State<HomePage> {
   ProjectService _projectService = ProjectService();
   List<List<String>> projects = [];
 
-  String? userIconPath;
+  String? userIconPath = 'assets/images/logged_user.png';
   String? userImage = 'assets/images/default_user.png';
   bool isLoggedIn = false;
 
@@ -38,7 +38,12 @@ class _HomePageState extends State<HomePage> {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
       isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
-      userIconPath = prefs.getString('userIconPath') ?? 'assets/images/default_user.png';
+      userIconPath = prefs.getString('userIconPath');
+      if (isLoggedIn && userIconPath != null) {
+        userImage = userIconPath;
+      } else {
+        userImage = 'assets/images/default_user.png';
+      }
     });
   }
 
@@ -279,7 +284,10 @@ class _HomePageState extends State<HomePage> {
                 // Botões 
                 Expanded(
                   flex: 3,
-                  child: Row(
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                      Row(
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -382,7 +390,10 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ],
               ),
+            ],
+            )
             ),
+              
                 
                 Row(
                   mainAxisSize: MainAxisSize.max,

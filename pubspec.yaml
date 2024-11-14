@@ -33,5 +33,6 @@ flutter:
       - assets/instruments/bass/
       - assets/images/
       - assets/images/default_user.png
+      - assets/images/logged_user.png
 
   uses-material-design: true
