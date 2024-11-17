@@ -96,16 +96,23 @@ void loadProjectData(Map<String, dynamic> data) {
 
     Track track = Track(trackInstrument);
 
-    track.startTime = trackData["startTime"];
-    track.duration  = trackData["duration"];
+    track.startTime = trackData["startTime"]?.toDouble();
+    track.duration  = trackData["duration"]?.toDouble();
 
     // Decodifica e adiciona notas à faixa
     List<dynamic> notesData = trackData["notes"];
     for (var noteData in notesData) {
       Note note = Note(
         noteName: noteData["noteName"],
-        startTime: noteData["startTime"],
-        duration: noteData["duration"],
+
+        // HACK
+        startTime: noteData["startTime"] is int
+          ? (noteData["startTime"] as int).toDouble()
+          : noteData["startTime"] as double? ?? 0.0,
+
+        duration: noteData["duration"] is int
+          ? (noteData["duration"] as int).toDouble()
+          : noteData["duration"] as double? ?? 0.0,
       );
       track.addNote(note);
     }

@@ -18,6 +18,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  late final ScrollController _scrollController;
 
   ProjectService _projectService = ProjectService();
   List<List<String>> projects = [];
@@ -31,6 +32,13 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     fetchProjectNames();
     checkUserStatus();
+    _scrollController = ScrollController();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 
   // Função para verificar se o usuário está logado usando SharedPreferences
@@ -409,14 +417,22 @@ class _HomePageState extends State<HomePage> {
                 ),
 
                 Expanded(
-                  
                   // Projetos
                   // Lista de Projetos Criados
-                  
                   flex: 2,
-                  
-                  child: Scrollbar(
+                  child: RawScrollbar(
+                    controller: _scrollController,
+
+                    thumbColor: Color.fromRGBO(58, 58, 71, 1),
+                    trackColor: Color.fromRGBO(20, 20, 28, 1),
+                    thumbVisibility: true,
+                    trackVisibility: true,
+                    radius: Radius.circular(20),
+                    thickness: 12,
+
+                    
                     child: ListView.builder(
+                      controller: _scrollController,
                       scrollDirection: Axis.horizontal,
                       itemCount: projects.length,
                       itemBuilder: (context, index) {
@@ -429,14 +445,16 @@ class _HomePageState extends State<HomePage> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) => ProjectPageWidget(
-                                    projectName: projects[index][1]),
+                                  projectName: projects[index][1],
+                                ),
                               ),
                             );
                           },
                           child: Container(
                             width: MediaQuery.sizeOf(context).width * 0.3,
                             height: MediaQuery.sizeOf(context).width * 0.3,
-                            margin: EdgeInsets.all(10),
+                            //margin: EdgeInsets.all(10),
+                            margin: EdgeInsets.only(bottom: 15, top: 2, left: 5, right: 5),
                             decoration: BoxDecoration(
                               color: Color(0xFF14141C),
                               borderRadius: BorderRadius.circular(20),
@@ -446,9 +464,10 @@ class _HomePageState extends State<HomePage> {
                                 Center(
                                   child: Text(
                                     projects[index][1],
-                                    //projects[index],
                                     style: TextStyle(
-                                        color: Colors.white, fontSize: 20),
+                                      color: Colors.white,
+                                      fontSize: 20,
+                                    ),
                                     textAlign: TextAlign.center,
                                   ),
                                 ),
@@ -469,7 +488,71 @@ class _HomePageState extends State<HomePage> {
                       },
                     ),
                   ),
-                ),
+                )
+
+                // Expanded(
+                  
+                //   // Projetos
+                //   // Lista de Projetos Criados
+                  
+                //   flex: 2,
+                  
+                //   child: Scrollbar(
+                //     controller: _scrollController,
+                //     child: ListView.builder(
+                //       scrollDirection: Axis.horizontal,
+                //       itemCount: projects.length,
+                //       itemBuilder: (context, index) {
+                //         return GestureDetector(
+                //           onTap: () async {
+                //             // Carrega o projeto
+                //             await _projectService.loadProjectById(projects[index][0]);
+
+                //             Navigator.push(
+                //               context,
+                //               MaterialPageRoute(
+                //                 builder: (context) => ProjectPageWidget(
+                //                     projectName: projects[index][1]),
+                //               ),
+                //             );
+                //           },
+                //           child: Container(
+                //             width: MediaQuery.sizeOf(context).width * 0.3,
+                //             height: MediaQuery.sizeOf(context).width * 0.3,
+                //             margin: EdgeInsets.all(10),
+                //             decoration: BoxDecoration(
+                //               color: Color(0xFF14141C),
+                //               borderRadius: BorderRadius.circular(20),
+                //             ),
+                //             child: Stack(
+                //               children: [
+                //                 Center(
+                //                   child: Text(
+                //                     projects[index][1],
+                //                     //projects[index],
+                //                     style: TextStyle(
+                //                         color: Colors.white, fontSize: 20),
+                //                     textAlign: TextAlign.center,
+                //                   ),
+                //                 ),
+                //                 Positioned(
+                //                   top: 14,
+                //                   right: 14,
+                //                   child: IconButton(
+                //                     icon: Icon(Icons.delete, color: Colors.red),
+                //                     onPressed: () {
+                //                       _showDeleteConfirmationDialog(index);
+                //                     },
+                //                   ),
+                //                 ),
+                //               ],
+                //             ),
+                //           ),
+                //         );
+                //       },
+                //     ),
+                //   ),
+                // ),
               ],
             ),
           ),
