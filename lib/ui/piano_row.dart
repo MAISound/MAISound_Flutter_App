@@ -262,9 +262,10 @@ class _PianoRowWidgetState extends State<PianoRowWidget> {
                         if (!playingCurrently.value) { // Check if already playing
                           _onNotePressed(noteName);
                         }
-
+                        
                         double clickXPosition = details.localPosition.dx;
                         clickXPosition = (clickXPosition / _snapStep).floor() * _snapStep;
+                        clickXPosition += scrollbarOffsetX;
 
                         widget.track.addNote(Note(
                           noteName: noteName,
@@ -426,7 +427,7 @@ class _PianoRowWidgetState extends State<PianoRowWidget> {
 
   void _updateNotePositionAndDuration(Note note, DragUpdateDetails details) {
     setState(() {
-      double clickYPosition = details.globalPosition.dy;
+      double clickYPosition = details.globalPosition.dy + _verticalScrollController.offset;
       int mouseGridY = (clickYPosition / 40).floor();
 
 
