@@ -6,6 +6,7 @@ import 'package:maisound/classes/globals.dart';
 enum InstrumentTypes {
   piano,
   bass,
+  saxofone,
 }
 
 // Define the order of note letters
@@ -88,7 +89,11 @@ class Instrument {
       name = "Piano";
       color = Color.fromARGB(255, 60, 104, 248);
     }
-    
+    if (type == InstrumentTypes.bass){
+      name = "Saxofone";
+      color = Color.fromARGB(255, 60, 104, 248);
+    }
+
     this.type = type;
 
     loadSounds(type);
@@ -216,6 +221,11 @@ class Instrument {
     if (type == InstrumentTypes.bass) {
       soundPath = "bass";
     }
+    if (type == InstrumentTypes.saxofone) {
+      octaves = [3, 4, 5];
+      soundPath = "saxofone";
+    }
+
 
     // Carrega as notas do instrumento
     for (int octave in octaves) {
