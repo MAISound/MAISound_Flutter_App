@@ -46,18 +46,13 @@ class _HomePageState extends State<HomePage> {
     // ----------------------------------------------------------------------------------------------
     // Método para buscar o nome do usuário atual
     Future<void> _fetchUserName() async {
-      try {
-        final token = await _userService.fetchCookie();
-        print(token);
-        if (token != null) {
-          final fetchedName = await _userService.getCurrentUserName();
-          setState(() {
-            userName = fetchedName;
-          });
-        }
-      } catch (e) {
-        print('Erro ao buscar o nome do usuário: $e');
-      }
+      // Marca usuario como logado
+      isLoggedIn = await _userService.isAuthenticated();
+      final user = await _userService.getUser();
+
+      setState(() {
+        userName = user["name"];
+      });
     }
   // ----------------------------------------------------------------------------------------------
 
@@ -277,6 +272,8 @@ class _HomePageState extends State<HomePage> {
                           if (value == 1) {
                             print('Change account icon selected');
                           } else if (value == 2) {
+                            _userService.logout();
+
                             setState(() {
                               isLoggedIn = false;
                               userImage = null;
