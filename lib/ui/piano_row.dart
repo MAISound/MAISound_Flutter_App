@@ -100,6 +100,11 @@ class _PianoRowWidgetState extends State<PianoRowWidget> {
   double? initialNoteDuration;
   double lastNoteDuration = 64;
 
+  // Scrollbar
+  late final ScrollController _horizontalScrollController;
+  late final ScrollController _verticalScrollController;
+  late final ScrollController _verticalScroll2Controller; // Direito
+
   void _updateMarkerPosition(double newPosition) {
     if (mounted) {
       setState(() {
@@ -111,6 +116,25 @@ class _PianoRowWidgetState extends State<PianoRowWidget> {
   @override
   void initState() {
     //recorder.setTimestamp(widget.track.startTime, true);
+    _horizontalScrollController = ScrollController();
+    _verticalScrollController = ScrollController();
+    _verticalScroll2Controller = ScrollController();
+
+    _verticalScrollController.addListener(() {
+      if (_verticalScrollController.offset != _verticalScroll2Controller.offset) {
+        _verticalScroll2Controller.jumpTo(_verticalScrollController.offset);
+      }
+
+      setState(() {});
+    });
+
+    _verticalScroll2Controller.addListener(() {
+      if (_verticalScrollController.offset != _verticalScroll2Controller.offset) {
+        _verticalScrollController.jumpTo(_verticalScroll2Controller.offset);
+      }
+
+      setState(() {});
+    });
 
     recorder.currentTimestamp.addListener(() {
       _markerPosition = recorder.getTimestamp(true);
@@ -131,6 +155,10 @@ class _PianoRowWidgetState extends State<PianoRowWidget> {
 
   @override
   void dispose() {
+    _horizontalScrollController.dispose();
+    _verticalScrollController.dispose();
+    _verticalScroll2Controller.dispose();
+
     recorder.currentTimestamp.removeListener(() {
       _markerPosition = recorder.getTimestamp(true);
     });
@@ -184,6 +212,7 @@ class _PianoRowWidgetState extends State<PianoRowWidget> {
       children: [
         Column(
           children: [
+
             // Marcador
             Padding(
               padding: EdgeInsets.only(left: 200),
@@ -197,88 +226,81 @@ class _PianoRowWidgetState extends State<PianoRowWidget> {
                 
                 children: [
                   
-                  // Notas verticais
-                  SizedBox(
-                    width: 200, // Largura das teclas brancas
-                    child: Stack(
-                      children: [
-                        // Notas Brancas
-                        Column(//Responsavel por posicionar as notas brancas, mexer nisso para o scrollbar posterior.
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: _notes.reversed 
-                              .where((note) => !note.values.first)
-                              .map((note) {
-                            // Notas brancas que são menores que o normal
-                            // Isso serve para que a GRID fique alinhada corretamente
-                            double height = (note.keys.first[0] == 'B' ||
-                                    note.keys.first[0] == 'C' ||
-                                    note.keys.first[0] == 'E' ||
-                                    note.keys.first[0] == 'F')
-                                ? 60
-                                : 80;
-                            return NoteWidget(
-                              note: note.keys.first,
-                              isBlack: false,
-                              height: height,
-
-                              // Funções da nota
-                              onPressed: (){ _onNotePressed(note.keys.first); print(height);},
-                              onReleased: () =>
-                                  _onNoteReleased(note.keys.first),
-                            );
-                          }).toList(),
-                        ),
-
-                        // Notas pretas
-                        Positioned(//alteração: tirar o .fill para poder posicionar a nota preta onde quiser
-                          left: -2, //posicinar ela com o left 0 para ficar mais na esquerda possivel.
-                          child: Column(
-                            children: _notes.reversed
-                                .where((note) => note.values.first)
-                                .map((note) {
-                              // Offset com base em algumas nota branca (Algumas notas pretas tem mais espaços entre elas)
-                              double topPadding = 80;
-                              if (note.keys.first.startsWith('F#') ||
-                                  note.keys.first.startsWith('G#') ||
-
-                                  note.keys.first.startsWith('C#')) {
-                                topPadding =
-                                    40; // Adjust padding for black notes after B/E
-                              }
-
-                              // HACK
-                              // A primeira nota preta de cima pra baixo tem um padding maior
-                              // Caso você mude o piano modifique isso daqui
-                              if (note.keys.first == "A#5") {
-                                topPadding = 40;
-                              }
-
-                              return Padding(
-                                padding: EdgeInsets.only(top: topPadding),
-                                child: SizedBox(
-                                  height: 40, // Notas pretas são menores
-                                  child: NoteWidget(
-                                    note: note.keys.first,
-                                    isBlack: true,
-                                    width:
-                                        197 / 1.5, // Largura das notas pretas
-                                    // Note functions
-                                    onPressed: () =>
-                                        _onNotePressed(note.keys.first),
-                                    onReleased: () =>
-                                        _onNoteReleased(note.keys.first),
-                                  ),
-                                ),
-                              );
-                            }).toList(),
-                          ),
-                        ),
-                      ],
-                    ),
+                  Scrollbar(
+                    controller: _verticalScrollController,
+                    thumbVisibility: true,
+                    child: SingleChildScrollView(
+                      controller: _verticalScrollController,
+                      child: SizedBox(
+                        width: 200,
+                        child: Stack(
+                          children: [
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: _notes.reversed
+                                  .where((note) => !note.values.first)
+                                  .map((note) {
+                                double height = (note.keys.first[0] == 'B' ||
+                                        note.keys.first[0] == 'C' ||
+                                        note.keys.first[0] == 'E' ||
+                                        note.keys.first[0] == 'F')
+                                    ? 60
+                                    : 80;
+                                return NoteWidget(
+                                  note: note.keys.first,
+                                  isBlack: false,
+                                  height: height,
+                                  onPressed: () =>
+                                      _onNotePressed(note.keys.first),
+                                  onReleased: () =>
+                                      _onNoteReleased(note.keys.first),
+                                );
+                              }).toList(),
+                            ),
+                            Positioned(
+                              left: -2,
+                              child: Column(
+                                children: _notes.reversed
+                                    .where((note) => note.values.first)
+                                    .map((note) {
+                                  double topPadding = 80;
+                                  if (note.keys.first.startsWith('F#') ||
+                                      note.keys.first.startsWith('G#') ||
+                                      note.keys.first.startsWith('C#')) {
+                                    topPadding = 40;
+                                  }
+                                  if (note.keys.first == "A#5") {
+                                    topPadding = 40;
+                                  }
+                                  return Padding(
+                                    padding: EdgeInsets.only(top: topPadding),
+                                    child: SizedBox(
+                                      height: 40,
+                                      child: NoteWidget(
+                                        note: note.keys.first,
+                                        isBlack: true,
+                                        width: 197 / 1.5,
+                                        onPressed: () =>
+                                            _onNotePressed(note.keys.first),
+                                        onReleased: () =>
+                                            _onNoteReleased(note.keys.first),
+                                      ),
+                                    ),
+                                  );
+                                }).toList(),
+                              ),
+                            ),
+                          ]
+                        )
+                      )
+                    )
                   ),
 
                   // Grid se extendendo a direita
                   Expanded(
+                    child: Scrollbar(
+                      controller: _verticalScroll2Controller,
+                        
                     child: Stack(
                       children: [
                         
@@ -286,6 +308,7 @@ class _PianoRowWidgetState extends State<PianoRowWidget> {
                         Container(
                           color: Colors.transparent, // Background da grid
                           child: GridView.builder(
+                            controller: _verticalScroll2Controller,
                             itemCount: _notes.length,
                             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 1,
@@ -375,9 +398,15 @@ class _PianoRowWidgetState extends State<PianoRowWidget> {
                           int noteIndex = _notes.indexWhere((n) => n.keys.first == note.noteName);
                           double topPosition = (_notes.length - noteIndex - 1) * 40;
 
+                          double scrollbarOffsetY = 0.0;
+                          
+                          if (_verticalScroll2Controller.hasClients){
+                            scrollbarOffsetY = _verticalScroll2Controller.offset;
+                          }
+
                           return Positioned(
                             left: note.startTime, // Posição X da nota baseada no tempo de começo
-                            top: topPosition.toDouble(), // Corrigi posição vertical
+                            top: topPosition.toDouble() - scrollbarOffsetY, // Corrigi posição vertical
                             child: Listener(
                             onPointerDown: (PointerDownEvent event) {
                               // Botao direito (deletar nota)
@@ -595,6 +624,7 @@ class _PianoRowWidgetState extends State<PianoRowWidget> {
                         }).toList(),
                       ],
                     ),
+                  )
                   )
                 ],
               ),

@@ -34,6 +34,7 @@ class _TrackPageWidgetState extends State<TrackPageWidget> {
 
   @override
   void dispose() {
+
     inTrack = false;
     super.dispose();
   }
