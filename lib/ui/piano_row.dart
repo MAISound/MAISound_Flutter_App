@@ -136,6 +136,10 @@ class _PianoRowWidgetState extends State<PianoRowWidget> {
       setState(() {});
     });
 
+    _horizontalScrollController.addListener(() {
+      setState(() {});
+    });
+
     recorder.currentTimestamp.addListener(() {
       _markerPosition = recorder.getTimestamp(true);
       
@@ -207,11 +211,52 @@ class _PianoRowWidgetState extends State<PianoRowWidget> {
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
 
+    // Calculate the total width needed for notes and margin
+    double totalWidth = widget.track.duration + 400; //widget.track.notes.fold(0.0, (sum, note) => sum + note.duration) + rightMargin;
+
     return Stack(
       
       children: [
         Column(
           children: [
+
+            LayoutBuilder(
+              builder: (context, constraints) {
+                // `constraints.maxWidth` provides the available width of the parent
+                final minWidth = constraints.maxWidth - 200;
+
+                print(totalWidth);
+
+                return Container(
+                  margin: EdgeInsets.only(left: 200),
+                  child: RawScrollbar(
+                    controller: _horizontalScrollController,
+
+                    thumbColor: Color.fromRGBO(58, 58, 71, 1),
+                    trackColor: Color.fromRGBO(20, 20, 28, 1),
+                    thumbVisibility: true,
+                    trackVisibility: true,
+                    radius: Radius.circular(20),
+                    thickness: 12,
+
+                    child: SingleChildScrollView(
+                      controller: _horizontalScrollController,
+                      scrollDirection: Axis.horizontal,
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(
+                          minWidth: minWidth, // Set the minimum width to the available context width
+                        ),
+                        child: SizedBox(
+                          width: totalWidth,
+                          height: 12,
+                          child: SizedBox(),
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
 
             // Marcador
             Padding(
@@ -300,7 +345,12 @@ class _PianoRowWidgetState extends State<PianoRowWidget> {
                   Expanded(
                     child: Scrollbar(
                       controller: _verticalScroll2Controller,
-                        
+                      
+                    // child: SingleChildScrollView( // Changed to SingleChildScrollView for horizontal scroll
+                    // controller: _horizontalScrollController, // Added horizontal scroll controller
+                    // scrollDirection: Axis.horizontal,
+                    // child: SizedBox( // Container to hold the notes and grid
+                    // width: totalWidth, //Large enough to accommodate note expansion
                     child: Stack(
                       children: [
                         
@@ -399,13 +449,18 @@ class _PianoRowWidgetState extends State<PianoRowWidget> {
                           double topPosition = (_notes.length - noteIndex - 1) * 40;
 
                           double scrollbarOffsetY = 0.0;
+                          double scrollbarOffsetX = 0.0;
                           
                           if (_verticalScroll2Controller.hasClients){
                             scrollbarOffsetY = _verticalScroll2Controller.offset;
                           }
 
+                          if (_horizontalScrollController.hasClients) {
+                            scrollbarOffsetX = _horizontalScrollController.offset;
+                          }
+
                           return Positioned(
-                            left: note.startTime, // Posição X da nota baseada no tempo de começo
+                            left: note.startTime - scrollbarOffsetX, // Posição X da nota baseada no tempo de começo
                             top: topPosition.toDouble() - scrollbarOffsetY, // Corrigi posição vertical
                             child: Listener(
                             onPointerDown: (PointerDownEvent event) {
