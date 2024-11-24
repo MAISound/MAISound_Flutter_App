@@ -95,7 +95,7 @@ class Recorder {
     }
 
     // Atualiza a posição da timestamp na track e no projeto
-    currentTimestamp.value += BPM / 60;
+    currentTimestamp.value += (BPM / 60) * 0.5;
 
     // Toca as notas conforme o tempo passa
     while (toPlay.isNotEmpty && currentTimestamp.value >= toPlay[0][2]) { // Use adjustedStartTime (3rd value)
@@ -217,6 +217,22 @@ class Recorder {
     _timer = Timer.periodic(Duration(milliseconds: 1), (timer) {
       update();
     });
+  }
+
+  void record(){
+    stop();
+    playingCurrently.value = false;
+
+    if(!inTrack){
+      return;
+    }
+
+
+    
+    
+
+
+
   }
 
 

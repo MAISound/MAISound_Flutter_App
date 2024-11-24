@@ -20,7 +20,7 @@ Widget getLine(_markerPosition, screenHeight, xoffset) {
 }
 
 class TimestampMarker extends StatefulWidget {
-  final Function(double) onPositionChanged; // Callback for position changes
+  final Function onPositionChanged; // Callback for position changes
   bool trackMarker;
 
   TimestampMarker({required this.onPositionChanged, required this.trackMarker}); // callback
