@@ -63,13 +63,13 @@ class _ControlBarWidget extends State<ControlBarWidget> {
   void _toggleChat() {
     setState(() {
       if (_isChatOpen) {
-        _chatOverlayEntry?.remove(); // Fecha a janela de chat
+        _chatOverlayEntry?.remove(); 
         _chatOverlayEntry = null;
       } else {
         _chatOverlayEntry = _createChatOverlay();
-        Overlay.of(context).insert(_chatOverlayEntry!); // Abre a janela de chat
+        Overlay.of(context).insert(_chatOverlayEntry!);
       }
-      _isChatOpen = !_isChatOpen; // Alterna o estado do chat
+      _isChatOpen = !_isChatOpen; 
     });
   }
   void _showBpmPicker() {
@@ -223,6 +223,29 @@ class _ControlBarWidget extends State<ControlBarWidget> {
                   borderRadius: 10,
                   borderWidth: 1,
                   buttonSize: 40,
+                  fillColor: recorder.playOnlyTrack.value ? Color.fromARGB(255, 255, 125, 38) : const Color(0xFF4B4B5B),
+                  icon: Icon(recorder.playOnlyTrack.value ? Icons.headphones : Icons.headphones, color: Colors.white, size: 24),
+                  onPressed: () {
+                    setState(() {
+                      recorder.playOnlyTrack.value = !recorder.playOnlyTrack.value;
+
+                      // Deixa o marcador na posição 0 relativa a track caso a posição atual seja incompativel com a track
+                      
+                      if (currentTrack != null) {
+                        double timestamp = recorder.getTimestamp(true);
+                        if (timestamp < 0 || timestamp > currentTrack!.duration) {
+                          recorder.setTimestamp(0, true);
+                        }
+                      }
+
+                    });
+                  },
+                ),
+                FlutterFlowIconButton(
+                  borderColor: const Color(0xFF242436),
+                  borderRadius: 10,
+                  borderWidth: 1,
+                  buttonSize: 40,
                   fillColor: const Color(0xFF4B4B5B),
                   icon: const Icon(Icons.piano, color: Colors.white, size: 24),
                   onPressed: () {
@@ -239,24 +262,35 @@ class _ControlBarWidget extends State<ControlBarWidget> {
                 ),
               ],
             ),
+            Padding(padding: EdgeInsets.only(right: 30)),
 
             // Volume slider
             SizedBox(
-              width: 100, // Ajustar a largura do slider
-              child: Slider(
-                activeColor: Colors.black,
-                inactiveColor: Colors.white30,
-                min: 0,
-                max: 1,
-                value: master_volume,
-                onChanged: (newValue) {
-                  setState(() {
-                    master_volume = newValue;
-                  });
-                },
+              width: 200, 
+              child: Row(
+                children: [
+                  Icon(
+                    master_volume > 0.50? Icons.volume_up : master_volume == 0? Icons.volume_off : Icons.volume_down,
+                    color: Colors.white,
+                    size: 24,
+                  ),
+                  Expanded( 
+                    child: Slider(
+                      activeColor: const Color(0xFF4B4B5B),
+                      inactiveColor: const Color(0xFF4B4B5B),
+                      min: 0,
+                      max: 1,
+                      value: master_volume,
+                      onChanged: (newValue) {
+                        setState(() {
+                          master_volume = newValue;
+                        });
+                      },
+                    ),
+                  ),
+                ],
               ),
             ),
-
             // Rewind, Play/Pause, Loop buttons and time indicator
             Row(
               children: [
@@ -277,6 +311,12 @@ class _ControlBarWidget extends State<ControlBarWidget> {
                         recorder.stop();
                       });
                     }
+
+                    if(recordingCurrently.value) {
+                      setState(() {
+                        recordingCurrently.value = false;
+                      });
+                    }
                   },
                 ),
 
@@ -285,16 +325,38 @@ class _ControlBarWidget extends State<ControlBarWidget> {
                   borderRadius: 10,
                   borderWidth: 1,
                   buttonSize: 40,
-                  fillColor: const Color(0xFF4B4B5B),
+                  fillColor: recordingCurrently.value ? const Color(0xFF888888) : const Color(0xFF4B4B5B),
                   icon: getPlayIcon(),
-                  onPressed: () {
+                  onPressed:recordingCurrently.value? null : () {
+                    
                     setState(() {
                       playingCurrently.value = !playingCurrently.value;
                     });
+
                   },
                 ),
               ],
             ),
+
+            if(inTrack)
+              FlutterFlowIconButton(
+              borderColor: const Color(0xFF242436),
+              borderRadius: 10,
+              borderWidth: 1,
+              buttonSize: 40,
+              fillColor: const Color(0xFF4B4B5B),
+              icon: recordingCurrently.value
+                  ? const Icon(Icons.square, color: Colors.white, size: 20)
+                  : const Icon(Icons.fiber_manual_record, color: Colors.white, size: 24),
+              onPressed: () {
+                setState(() {
+                  recordingCurrently.value = !recordingCurrently.value;
+                });
+              },
+            ),
+            
+            
+            Padding(padding: EdgeInsets.only(right: 30)),
 
             // Botão de IA que abre o chat no topo de toda a tela
             FlutterFlowIconButton(
@@ -306,7 +368,6 @@ class _ControlBarWidget extends State<ControlBarWidget> {
               icon: const Icon(Icons.memory, color: Colors.white, size: 24),
               onPressed: _toggleChat, // Abre ou fecha o chat
             ),
-            Padding(padding: EdgeInsets.only(right: 20)),
             FlutterFlowIconButton(
               borderColor: const Color(0xFF242436),
               borderRadius: 10,

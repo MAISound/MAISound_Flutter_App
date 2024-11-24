@@ -219,6 +219,18 @@ class Recorder {
     });
   }
 
+  void record(){
+    stop();
+    playingCurrently.value = false;
+    
+
+    
+    
+
+
+
+  }
+
 
   // Para o recorder e limpa algumas listas
   void stop() {
