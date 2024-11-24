@@ -293,7 +293,7 @@ class _PianoRowWidgetState extends State<PianoRowWidget> {
           Positioned.fill(
             child: IgnorePointer(
               child: CustomPaint(
-                painter: VerticalGridPainter(stepGrid: _snapStep),
+                painter: VerticalGridPainter(stepGrid: _snapStep,  scrollOffsetX: scrollbarOffsetX),
               ),
             ),
           ),
@@ -524,8 +524,9 @@ class _PianoRowWidgetState extends State<PianoRowWidget> {
 
 class VerticalGridPainter extends CustomPainter {
   final double stepGrid;
+  final double scrollOffsetX;
 
-  VerticalGridPainter({required this.stepGrid});
+  VerticalGridPainter({required this.stepGrid, required this.scrollOffsetX});
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -537,12 +538,12 @@ class VerticalGridPainter extends CustomPainter {
       ..color = Colors.black.withOpacity(0.4)
       ..strokeWidth = 1;
 
-    for (double x = stepGrid; x < size.width; x += stepGrid) {
+    for (double x = stepGrid - scrollOffsetX % stepGrid; x < size.width; x += stepGrid) {
       canvas.drawLine(Offset(x, 0), Offset(x, size.height), paint);
     }
 
     double bigStepGrid = stepGrid * 16;
-    for (double x = bigStepGrid; x < size.width; x += bigStepGrid) {
+    for (double x = bigStepGrid - scrollOffsetX % bigStepGrid; x < size.width; x += bigStepGrid) {
       canvas.drawLine(Offset(x, 0), Offset(x, size.height), paint2);
     }
   }
