@@ -23,8 +23,8 @@ class _HomePageState extends State<HomePage> {
   ProjectService _projectService = ProjectService();
   List<List<String>> projects = [];
 
-  String? userIconPath = 'assets/images/logged_user.png';
-  String? userImage = 'assets/images/default_user.png';
+  String? userIconPath = 'assets/images/default_user.png';
+  String? userImage = 'assets/images/logged_user.png';
   bool isLoggedIn = false;
 
   @override
@@ -95,92 +95,143 @@ class _HomePageState extends State<HomePage> {
 
   //Metodo da caixa de dialogo para inserir o nome do projeto:
   Future<void> _showAddProjectDialog() async {
-    String? projectName;
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false, // O usuário deve inserir o nome ou cancelar.
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Enter Project Name'),
-          content: TextField(
-            autofocus: true,
-            maxLength: 20,
-            decoration: InputDecoration(
-              hintText: 'Project Name',
+  String? projectName;
+  return showDialog<void>(
+    context: context,
+    barrierDismissible: false, // O usuário deve inserir o nome ou cancelar.
+    builder: (BuildContext context) {
+      return AlertDialog(
+        backgroundColor: const Color(0xFF1D1D25), // Combina com o tema
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: const Text(
+          'Enter the Project Name',
+          style: TextStyle(color: Colors.white, fontSize: 20),
+        ),
+        content: TextField(
+          autofocus: true,
+          maxLength: 20,
+          style: const TextStyle(color: Colors.white),
+          decoration: InputDecoration(
+            hintText: 'Project name',
+            hintStyle: const TextStyle(color: Colors.white38),
+            enabledBorder: OutlineInputBorder(
+              borderSide: const BorderSide(color: Colors.white24, width: 1),
+              borderRadius: BorderRadius.circular(8),
             ),
-            onChanged: (value) {
-              projectName = value;
+            focusedBorder: OutlineInputBorder(
+              borderSide: const BorderSide(color: Colors.white, width: 1.5),
+              borderRadius: BorderRadius.circular(8),
+            ),
+          ),
+          onChanged: (value) {
+            projectName = value;
+          },
+        ),
+        actions: <Widget>[
+          TextButton(
+            child: const Text(
+              'Cancel',
+              style: TextStyle(color: Color.fromARGB(179, 252, 0, 0), fontSize: 18),
+            ),
+            onPressed: () {
+              Navigator.of(context).pop(); // Fecha a caixa de diálogo sem criar o projeto.
             },
           ),
-          actions: <Widget>[
-            TextButton(
-              child: Text('Cancel'),
-              onPressed: () {
-                Navigator.of(context)
-                    .pop(); // Fecha a caixa de diálogo sem criar o projeto.
-              },
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFF383846), // Botão destacado
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
             ),
-            ElevatedButton(
-              child: Text('Create'),
-              onPressed: () async {
-                if (projectName != null && projectName!.isNotEmpty) {
-
-                  project_name = projectName!; // Muda nome global do projeto
-                              
-                  // Aguarda a confirmação de que o projeto foi salvo
-                  await _projectService.create();
-
-                  // Adiciona um pequeno atraso para garantir que o banco de dados seja atualizado
-                  await Future.delayed(Duration(milliseconds: 200));
-
-                  // Atualiza a lista de projetos após o atraso
-                  fetchProjectNames();
-
-                  Navigator.of(context).pop(); // Fecha a caixa de diálogo.
-                }
-              },
+            child: const Text(
+              'Create',
+              style: TextStyle(color: Colors.green, fontSize: 18),
             ),
-          ],
-        );
-      },
-    );
-  }
+            onPressed: () async {
+              if (projectName != null && projectName!.isNotEmpty) {
+                project_name = projectName!; // Muda nome global do projeto
 
-  // Método da caixa de diálogo para confirmar a exclusão do projeto:
-  Future<void> _showDeleteConfirmationDialog(int index) async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false, // O usuário deve confirmar.
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Delete Project'),
-          content: Text('Are you sure you want to delete this project?'),
-          actions: <Widget>[
-            TextButton(
-              child: Text('Cancel'),
-              onPressed: () {
-                Navigator.of(context).pop(); // Fecha a caixa de diálogo.
-              },
-            ),
-            ElevatedButton(
-              child: Text('Delete'),
-              onPressed: () async {
-                await _projectService.deleteProject(projects[index][0]);
+                // Aguarda a confirmação de que o projeto foi salvo
+                await _projectService.create();
 
                 // Adiciona um pequeno atraso para garantir que o banco de dados seja atualizado
-                await Future.delayed(Duration(milliseconds: 200));
+                await Future.delayed(const Duration(milliseconds: 200));
 
                 // Atualiza a lista de projetos após o atraso
                 fetchProjectNames();
 
                 Navigator.of(context).pop(); // Fecha a caixa de diálogo.
-              },
+              }
+            },
+          ),
+        ],
+      );
+    },
+  );
+}
+
+  Future<void> _showDeleteConfirmationDialog(int index) async {
+  return showDialog<void>(
+    context: context,
+    barrierDismissible: false, // User must confirm.
+    builder: (BuildContext context) {
+      return AlertDialog(
+        backgroundColor: const Color(0xFF1D1D25), // Background color
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: const Text(
+          'Delete Project',
+          style: TextStyle(color: Colors.white, fontSize: 20),
+        ),
+        content: const Text(
+          'Are you sure you want to delete this project?',
+          style: TextStyle(color: Colors.white70, fontSize: 14),
+        ),
+        actions: <Widget>[
+          TextButton(
+            child: const Text(
+              'Cancel',
+              style: TextStyle(
+                color: Color.fromARGB(179, 252, 0, 0),
+                fontSize: 18,
+              ),
             ),
-          ],
-        );
-      },
-    );
-  }
+            onPressed: () {
+              Navigator.of(context).pop(); // Close the dialog.
+            },
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFF383846), // Button color
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+            child: const Text(
+              'Delete',
+              style: TextStyle(
+                color: Colors.redAccent,
+                fontSize: 18,
+              ),
+            ),
+            onPressed: () async {
+              await _projectService.deleteProject(projects[index][0]);
+
+              // Add a small delay to ensure the database is updated
+              await Future.delayed(const Duration(milliseconds: 200));
+
+              // Refresh the project list after the delay
+              fetchProjectNames();
+
+              Navigator.of(context).pop(); // Close the dialog.
+            },
+          ),
+        ],
+      );
+    },
+  );
+}
+
 
   // Carrega os projetos salvos:
   void fetchProjectNames() async {
@@ -291,118 +342,117 @@ class _HomePageState extends State<HomePage> {
 
                 // Botões 
                 Expanded(
-                  flex: 3,
-                  child: Column(
+                flex: 3,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Row(
+                      mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                      Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      // Botão de Menu
-                      Column(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          FlutterFlowIconButton(
-                            borderRadius: 20,
-                            borderWidth: 1,
-                            buttonSize: 80,
-                            fillColor: Color.fromRGBO(18, 18, 23, 0.9),
-                            hoverColor: Color.fromRGBO(18, 18, 23, 0.6),
-                            hoverIconColor: Colors.white,
-                            icon: FaIcon(
-                              FontAwesomeIcons.bars,
-                              color: Colors.white,
-                              size: 30,
+                        // Botão de Menu
+                        Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            FlutterFlowIconButton(
+                              borderRadius: 20,
+                              borderWidth: 1,
+                              buttonSize: 80,
+                              fillColor: Color.fromRGBO(18, 18, 23, 0.9),
+                              hoverColor: Color.fromRGBO(18, 18, 23, 0.6),
+                              hoverIconColor: Colors.white,
+                              icon: FaIcon(
+                                FontAwesomeIcons.bars,
+                                color: Colors.white,
+                                size: 30,
+                              ),
+                              onPressed: () {
+                                print('MenuButton pressed ...');
+                              },
                             ),
-                            onPressed: () {
-                              print('MenuButton pressed ...');
-                            },
-                          ),
-                          Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
-                            child: Text(
-                              'Menu',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(color: Colors.white),
+                            Padding(
+                              padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
+                              child: Text(
+                                'Menu',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(color: Colors.white),
+                              ),
                             ),
-                          ),
-                                    
+                          ],
+                        ),
+                        SizedBox(width: 50), // Espaço entre os botões
 
-                      // Botão de Novo Projeto
-                      Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          FlutterFlowIconButton(
-                            borderRadius: 20,
-                            borderWidth: 1,
-                            buttonSize: 80,
-                            fillColor: Color.fromRGBO(18, 18, 23, 0.9),
-                            hoverColor: Color.fromRGBO(18, 18, 23, 0.6),
-                            hoverIconColor: Colors.white,
-                            icon: FaIcon(
-                              FontAwesomeIcons.plus,
-                              color: Colors.white,
-                              size: 30,
+                        // Botão de Novo Projeto
+                        Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            FlutterFlowIconButton(
+                              borderRadius: 20,
+                              borderWidth: 1,
+                              buttonSize: 80,
+                              fillColor: Color.fromRGBO(18, 18, 23, 0.9),
+                              hoverColor: Color.fromRGBO(18, 18, 23, 0.6),
+                              hoverIconColor: Colors.white,
+                              icon: FaIcon(
+                                FontAwesomeIcons.plus,
+                                color: Colors.white,
+                                size: 30,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  // Abre a caixa de diálogo para inserir o nome do projeto.
+                                  _showAddProjectDialog();
+                                });
+                              },
                             ),
-                            onPressed: () {
-                              setState(() {
-                                // Abre a caixa de dialogo para inserir o nome do projeto.
-                                _showAddProjectDialog();
-                              });
-                            },
-                          ),
-                          Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
-                            child: Text(
-                              'New Project',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(color: Colors.white),
+                            Padding(
+                              padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
+                              child: Text(
+                                'New Project',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(color: Colors.white),
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                      // Botão de Carregar Projeto
-                      Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          FlutterFlowIconButton(
-                            borderRadius: 20,
-                            borderWidth: 1,
-                            buttonSize: 80,
-                            fillColor: Color.fromRGBO(18, 18, 23, 0.9),
-                            hoverColor: Color.fromRGBO(18, 18, 23, 0.6),
-                            hoverIconColor: Colors.white,
-                            icon: Icon(
-                              Icons.upload_file,
-                              color: Colors.white,
-                              size: 30,
+                          ],
+                        ),
+                        SizedBox(width: 50), // Espaço entre os botões
+
+                        // Botão de Carregar Projeto
+                        Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            FlutterFlowIconButton(
+                              borderRadius: 20,
+                              borderWidth: 1,
+                              buttonSize: 80,
+                              fillColor: Color.fromRGBO(18, 18, 23, 0.9),
+                              hoverColor: Color.fromRGBO(18, 18, 23, 0.6),
+                              hoverIconColor: Colors.white,
+                              icon: Icon(
+                                Icons.upload_file,
+                                color: Colors.white,
+                                size: 30,
+                              ),
+                              onPressed: () {
+                                print('Load Project button pressed...');
+                              },
                             ),
-                            onPressed: () {
-                              print('Load Project button pressed...');
-                            },
-                          ),
-                          Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
-                            child: Text(
-                              'Load Project',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(color: Colors.white),
+                            Padding(
+                              padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
+                              child: Text(
+                                'Load Project',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(color: Colors.white),
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ].divide(SizedBox(width: 106)),
-                  ),
-                ],
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ],
-            )
-            ),
-              
-                
                 Row(
                   mainAxisSize: MainAxisSize.max,
                   children: [
