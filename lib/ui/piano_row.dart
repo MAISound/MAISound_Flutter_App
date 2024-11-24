@@ -203,9 +203,9 @@ class _PianoRowWidgetState extends State<PianoRowWidget> {
                     child: Stack(
                       children: [
                         // Notas Brancas
-                        Column(
+                        Column(//Responsavel por posicionar as notas brancas, mexer nisso para o scrollbar posterior.
                           mainAxisAlignment: MainAxisAlignment.start,
-                          children: _notes.reversed
+                          children: _notes.reversed 
                               .where((note) => !note.values.first)
                               .map((note) {
                             // Notas brancas que são menores que o normal
@@ -222,7 +222,7 @@ class _PianoRowWidgetState extends State<PianoRowWidget> {
                               height: height,
 
                               // Funções da nota
-                              onPressed: () => _onNotePressed(note.keys.first),
+                              onPressed: (){ _onNotePressed(note.keys.first); print(height);},
                               onReleased: () =>
                                   _onNoteReleased(note.keys.first),
                             );
@@ -231,7 +231,7 @@ class _PianoRowWidgetState extends State<PianoRowWidget> {
 
                         // Notas pretas
                         Positioned(//alteração: tirar o .fill para poder posicionar a nota preta onde quiser
-                          left: 0, //posicinar ela com o left 0 para ficar mais na esquerda possivel.
+                          left: -2, //posicinar ela com o left 0 para ficar mais na esquerda possivel.
                           child: Column(
                             children: _notes.reversed
                                 .where((note) => note.values.first)

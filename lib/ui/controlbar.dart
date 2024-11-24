@@ -8,7 +8,7 @@ import 'package:maisound/project_page.dart';
 import 'package:maisound/services/project_service.dart';
 import 'package:maisound/track_page.dart';
 import 'package:maisound/ui/chat_page.dart';
-import 'package:maisound/ui/input_number.dart';
+import 'package:numberpicker/numberpicker.dart';
 
 
 class ControlBarWidget extends StatefulWidget {
@@ -19,7 +19,6 @@ class ControlBarWidget extends StatefulWidget {
 }
 
 class _ControlBarWidget extends State<ControlBarWidget> {
-  late TextEditingController _controller;
   OverlayEntry? _chatOverlayEntry; // Mantém a referência do OverlayEntry
   bool _isChatOpen = false; // Estado para controlar se o chat está aberto
   ProjectService _projectService = ProjectService();
@@ -27,34 +26,13 @@ class _ControlBarWidget extends State<ControlBarWidget> {
   @override
   void initState() {
     super.initState();
-    _controller = TextEditingController(text: '130');
-    _controller.addListener(_onTextChanged);
   }
 
   @override
   void dispose() {
-    _controller.dispose();
     super.dispose();
   }
 
-  void _onTextChanged() {
-    String text = _controller.text;
-    int? value = int.tryParse(text);
-    if (value != null) {
-      if (value < 1) {
-        _controller.text = '1';
-        _controller.selection = TextSelection.fromPosition(
-          TextPosition(offset: _controller.text.length),
-        );
-      } else if (value > 999) {
-        _controller.text = '999';
-        _controller.selection = TextSelection.fromPosition(
-          TextPosition(offset: _controller.text.length),
-        );
-      }
-      BPM = value.toDouble();
-    }
-  }
 
   Icon getPlayIcon() {
     if (playingCurrently.value) {
@@ -66,19 +44,19 @@ class _ControlBarWidget extends State<ControlBarWidget> {
 
   // Cria o OverlayEntry para a tela de chat
   OverlayEntry _createChatOverlay() {
-  return OverlayEntry(
-    builder: (context) => Positioned(
-      right: 0,
-      top: 0,
-      width: MediaQuery.of(context).size.width * 0.3, // Defina a largura desejada
-      height: MediaQuery.of(context).size.height, // Defina a altura como a tela inteira
-      child: Material(
-        color: Colors.transparent,
-        child: ChatPage(), // A sua ChatPage aqui
+    return OverlayEntry(
+      builder: (context) => Positioned(
+        right: 0,
+        top: 0,
+        width: MediaQuery.of(context).size.width * 0.3, // Defina a largura desejada
+        height: MediaQuery.of(context).size.height, // Defina a altura como a tela inteira
+        child: Material(
+          color: Colors.transparent,
+          child: ChatPage(),
+        ),
       ),
-    ),
-  );
-}
+    );
+  }
 
   
 
@@ -93,7 +71,93 @@ class _ControlBarWidget extends State<ControlBarWidget> {
       }
       _isChatOpen = !_isChatOpen; // Alterna o estado do chat
     });
-}
+  }
+  void _showBpmPicker() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        int tempBpm = BPM.toInt(); // Armazena o BPM temporariamente
+        return StatefulBuilder( // Permite que o diálogo atualize seu próprio estado
+          builder: (BuildContext context, StateSetter setState) {
+            return AlertDialog(
+              backgroundColor: const Color(0xFF1D1D25), // Combina com o tema
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+              title: const Text(
+                "Ajustar BPM",
+                style: TextStyle(color: Colors.white, fontSize: 20),
+              ),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text(
+                    "Escolha o valor do BPM",
+                    style: TextStyle(color: Colors.white70, fontSize: 14),
+                  ),
+                  const SizedBox(height: 20),
+                  NumberPicker(
+                    minValue: 50,
+                    maxValue: 300,
+                    value: tempBpm,
+                    step: 1,
+                    haptics: true,
+                    textStyle: const TextStyle(color: Colors.white38, fontSize: 16),
+                    selectedTextStyle: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    decoration: BoxDecoration(
+                      border: Border(
+                        top: BorderSide(color: Colors.white24, width: 1),
+                        bottom: BorderSide(color: Colors.white24, width: 1),
+                      ),
+                    ),
+                    onChanged: (newValue) {
+                      setState(() {
+                        tempBpm = newValue; // Atualiza o BPM temporário no diálogo
+                      });
+                    },
+                  ),
+                ],
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(); // Fecha o diálogo sem salvar
+                  },
+                  child: const Text(
+                    "Cancelar",
+                    style: TextStyle(color: Colors.redAccent, fontSize: 16),
+                  ),
+                ),
+                TextButton(
+                  onPressed: () {
+                    setState(() {
+                      BPM = tempBpm.toDouble(); // Atualiza o BPM globalmente
+                    });
+                    Navigator.of(context).pop(); // Fecha o diálogo após salvar
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text("BPM ajustado para $tempBpm"),
+                        backgroundColor: Colors.green,
+                        duration: const Duration(seconds: 2),
+                      ),
+                    );
+                  },
+                  child: const Text(
+                    "Salvar",
+                    style: TextStyle(color: Colors.greenAccent, fontSize: 16),
+                  ),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -242,25 +306,16 @@ class _ControlBarWidget extends State<ControlBarWidget> {
               icon: const Icon(Icons.memory, color: Colors.white, size: 24),
               onPressed: _toggleChat, // Abre ou fecha o chat
             ),
-            SizedBox(
-              width: 70, // Ajustar a largura do slider
-              child: InputNumber(label: "BPM", onChanged: (new_value)=> BPM = new_value.toDouble(),
-               value: BPM.toInt(), min: 50, max: 300)
+            Padding(padding: EdgeInsets.only(right: 20)),
+            FlutterFlowIconButton(
+              borderColor: const Color(0xFF242436),
+              borderRadius: 10,
+              borderWidth: 1,
+              buttonSize: 40,
+              fillColor: const Color(0xFF4B4B5B),
+              icon: const Icon(Icons.speed, color: Colors.white, size: 24),
+              onPressed: _showBpmPicker, // Chama o seletor de BPM
             ),
-
-            Row(
-              children: [
-                Text(
-                  'BPM',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                  ),
-                ),
-              ],
-
-            )
-
             
           ],
         ),
