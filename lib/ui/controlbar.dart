@@ -223,6 +223,29 @@ class _ControlBarWidget extends State<ControlBarWidget> {
                   borderRadius: 10,
                   borderWidth: 1,
                   buttonSize: 40,
+                  fillColor: recorder.playOnlyTrack.value ? Color.fromARGB(255, 255, 125, 38) : const Color(0xFF4B4B5B),
+                  icon: Icon(recorder.playOnlyTrack.value ? Icons.headphones : Icons.headphones, color: Colors.white, size: 24),
+                  onPressed: () {
+                    setState(() {
+                      recorder.playOnlyTrack.value = !recorder.playOnlyTrack.value;
+
+                      // Deixa o marcador na posição 0 relativa a track caso a posição atual seja incompativel com a track
+                      
+                      if (currentTrack != null) {
+                        double timestamp = recorder.getTimestamp(true);
+                        if (timestamp < 0 || timestamp > currentTrack!.duration) {
+                          recorder.setTimestamp(0, true);
+                        }
+                      }
+
+                    });
+                  },
+                ),
+                FlutterFlowIconButton(
+                  borderColor: const Color(0xFF242436),
+                  borderRadius: 10,
+                  borderWidth: 1,
+                  buttonSize: 40,
                   fillColor: const Color(0xFF4B4B5B),
                   icon: const Icon(Icons.piano, color: Colors.white, size: 24),
                   onPressed: () {
