@@ -359,7 +359,13 @@ class _InstrumentTracksState extends State<InstrumentTracks>{
                                         icon: Icon(Icons.close),
                                         onPressed: () {
                                           setState(() {
+                                            for(int i = 0; i < tracks.length; i++) {
+                                              if(tracks[i].instrument == instrument) {
+                                                tracks.removeAt(i);
+                                              }
+                                            }	
                                             instruments.removeAt(index);
+                                            
                                           });
                                         },
                                       ),

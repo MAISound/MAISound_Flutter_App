@@ -37,6 +37,12 @@ class Recorder {
         stop();
       }
     });
+
+    recordingCurrently.addListener(() {
+      if (recordingCurrently.value) {
+        startRecording();
+      }
+    });
   }
 
   // Caso TRUE:  retorna a posição do marcador na track atual (Tempo relativo)
@@ -100,11 +106,12 @@ class Recorder {
     final maxNotesPerFrame = 10; // Adjust this value for performance tuning
 
     while (toPlay.isNotEmpty && currentTimestamp.value >= toPlay[0][2] && notesProcessedThisFrame < maxNotesPerFrame) {
+      print(toPlay);
       List<dynamic> nextToPlay = toPlay.removeAt(0);
       Note note = nextToPlay[0];
       int instrumentIndex = nextToPlay[1];
       double adjustedStartTime = nextToPlay[2];
-
+      print(instrumentIndex);
       instruments[instrumentIndex].playSound(note.noteName);
 
       double stopTime = adjustedStartTime + note.duration;
@@ -233,8 +240,8 @@ class Recorder {
       if (toRecord.value != null) {
         for (var noteData in toRecord.value) {
           // Atualizar a duração CONTINUAMENTE enquanto noteData[2] for 0 (pressionado)
-          if (noteData[2] == 0) {
-            noteData[2] = currentTimestamp.value - noteData[1];
+          if (noteData[2]<128) {
+            noteData[2] = getTimestamp(true) - noteData[1];
 
             // Encontre a nota em currentTrack!.notes pelo startTime e noteName
             int index = currentTrack!.notes.indexWhere((note) =>
@@ -266,4 +273,5 @@ class Recorder {
     toPlay.clear();
     playingNotes.clear();
   }
+  
 }
