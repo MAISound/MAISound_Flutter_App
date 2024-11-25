@@ -226,21 +226,22 @@ class Recorder {
     });
   }
 
+
   void startRecording() {
     if (!recordingCurrently.value) return;
 
-    Timer.periodic(Duration(milliseconds: 32), (timer) {
+    Timer.periodic(Duration(milliseconds: 16), (timer) {
       if (!recordingCurrently.value) {
         timer.cancel();
         return;
       }
 
-      currentTimestamp.value += (60 / BPM);
+      currentTimestamp.value += (60 / BPM) * 1.5;
 
       if (toRecord.value != null) {
         for (var noteData in toRecord.value) {
-          // Atualizar a duração CONTINUAMENTE enquanto noteData[2] for 0 (pressionado)
-          if (noteData[2]<128) {
+          // Atualizar apenas as notas que ainda estão ativas (pressionadas)
+          if (noteData[3] == true) {
             noteData[2] = getTimestamp(true) - noteData[1];
 
             // Encontre a nota em currentTrack!.notes pelo startTime e noteName
@@ -263,6 +264,7 @@ class Recorder {
       }
     });
   }
+
 
   // Para o recorder e limpa algumas listas
   void stop() {

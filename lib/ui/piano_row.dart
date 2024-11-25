@@ -47,7 +47,7 @@ class _NoteWidgetState extends State<NoteWidget> {
           if (recordingCurrently.value) {
             toRecord.value = [
               ...toRecord.value,
-              [widget.note, recorder.getTimestamp(true), 0] // `duration` começa como 0
+              [widget.note, recorder.getTimestamp(true), 0, true] // "ativo" começa como true
             ];
             lastRecordedIndex = toRecord.value.length - 1;
           }
@@ -60,7 +60,9 @@ class _NoteWidgetState extends State<NoteWidget> {
           _isPressed = false;
 
           if (recordingCurrently.value) {
-            // Atualizar o `duration` final da nota
+            // Atualizar o `ativo` para false ao soltar a tecla
+            toRecord.value[lastRecordedIndex!][3] = false;
+            // Atualizar o `duration` final
             toRecord.value[lastRecordedIndex!][2] =
                 recorder.getTimestamp(true) - toRecord.value[lastRecordedIndex!][1];
           }
@@ -71,8 +73,10 @@ class _NoteWidgetState extends State<NoteWidget> {
         print("deu que cancelou.");
         setState(() {
           _isPressed = false;
-           if (recordingCurrently.value) {
-            // Atualizar o `duration` final da nota
+          if (recordingCurrently.value) {
+            // Atualizar o `ativo` para false ao cancelar
+            toRecord.value[lastRecordedIndex!][3] = false;
+            // Atualizar o `duration` final
             toRecord.value[lastRecordedIndex!][2] =
                 recorder.getTimestamp(true) - toRecord.value[lastRecordedIndex!][1];
           }
