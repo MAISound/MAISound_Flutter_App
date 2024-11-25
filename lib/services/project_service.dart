@@ -67,7 +67,7 @@ String stringifyProject() {
 void loadProjectData(Map<String, dynamic> data) {
   // Configurações do projeto
   project_name = data["name"];
-  current_projectId = data["_id"];
+  current_projectId = data["_id"] ?? "Unknown";
   BPM = data["bpm"]+0.0;
 
   // Limpa listas de instrumentos e faixas atuais
@@ -210,6 +210,7 @@ class ProjectService {
 
     if (response.statusCode == 201) {
       print('Projeto salvo com sucesso');
+      print(response.body);
     } else {
       throw Exception('Erro ao enviar a mensagem: ${response.body}');
     }
