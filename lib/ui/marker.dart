@@ -47,7 +47,11 @@ class _TimestampMarkerState extends State<TimestampMarker> {
       _markerPosition = recorder.getTimestamp(widget.trackMarker);
 
       // Notifica a classe pai da mudança
-      widget.onPositionChanged(_markerPosition);
+      try {
+        widget.onPositionChanged(_markerPosition);
+      } catch(e) {
+        print(e);
+      }
     });
   }
 
