@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutterflow_ui/flutterflow_ui.dart';
 import 'package:maisound/cadastro_page.dart';
 import 'package:maisound/classes/globals.dart';
+import 'package:maisound/home_page.dart';
 import 'package:maisound/project_page.dart';
 import 'package:maisound/services/project_service.dart';
 import 'package:maisound/track_page.dart';
@@ -187,7 +188,17 @@ class _ControlBarWidget extends State<ControlBarWidget> {
                   buttonSize: 40,
                   fillColor: const Color(0xFF4B4B5B),
                   icon: const Icon(Icons.menu, color: Colors.white, size: 24),
-                  onPressed: () {},
+                  onPressed: () async {
+                    Navigator.pushReplacement(
+                      context,
+                      PageRouteBuilder(
+                        pageBuilder: (context, animation1, animation2) =>
+                            HomePage(),
+                        transitionDuration: Duration.zero,
+                        reverseTransitionDuration: Duration.zero,
+                      ),
+                    );
+                  },
                 ),
                 // Salvar
                 FlutterFlowIconButton(

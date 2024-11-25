@@ -8,6 +8,9 @@ import 'package:maisound/classes/track.dart';
 // User
 String username = "user";
 
+// Tem um projeto na memória?
+bool loadedProject = false;
+
 // Config
 String project_name = "Generic";
 String current_projectId = "Generic";

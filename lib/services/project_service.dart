@@ -147,6 +147,12 @@ class ProjectService {
     if (response.statusCode == 200) {
       // Projeto deletado com sucesso
       print('Projeto deletado com sucesso');
+
+      // Se o ID do projeto sendo deletado for o mesmo do projeto aberto, entao não há mais nenhum projeto aberto
+      if (projectId == current_projectId) {
+        loadedProject = false;
+      }
+      
     } else {
       throw Exception('Erro ao deletar o projeto: ${response.body}');
     }
@@ -164,6 +170,8 @@ class ProjectService {
 
       // Carrega o projeto
       loadProjectData(data['project']);
+
+      loadedProject = true;
 
       return data['project']; // Retorna os dados do projeto
     } else {

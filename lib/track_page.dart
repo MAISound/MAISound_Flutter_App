@@ -4,6 +4,7 @@ import 'package:maisound/classes/instrument.dart';
 import 'package:maisound/classes/track.dart';
 import 'package:maisound/ui/controlbar.dart';
 import 'package:maisound/ui/piano_row.dart';
+import 'package:universal_html/html.dart' as html;
 
 // Mostra uma track visualmente (Classe Track)
 class TrackPageWidget extends StatefulWidget {
@@ -30,6 +31,9 @@ class _TrackPageWidgetState extends State<TrackPageWidget> {
 
     //recorder.setTrack(track);
     // Prevent default event handler
+    html.document.onContextMenu.listen((event) {
+      event.preventDefault(); // Impede o menu de contexto de ser exibido
+    });
   }
 
   @override

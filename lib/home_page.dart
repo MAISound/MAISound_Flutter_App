@@ -12,9 +12,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:maisound/login_page.dart';
 import 'package:maisound/services/user_service.dart'; 
 import 'dart:io';
-import 'dart:html' as html;
+//import 'dart:html' as html;
 
 export 'package:flutterflow_ui/flutterflow_ui.dart';
+
+// Importa dart:html apenas para a web
+//import 'dart:html' as html;
+import 'package:universal_html/html.dart' as html;
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -468,6 +472,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    bool _loadedProject = loadedProject;
+
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
@@ -616,22 +622,31 @@ class _HomePageState extends State<HomePage> {
                                   borderRadius: 20,
                                   borderWidth: 1,
                                   buttonSize: 80,
-                                  fillColor: Color.fromRGBO(18, 18, 23, 0.9),
+                                  fillColor: _loadedProject
+                                  ? Color.fromRGBO(18, 18, 23, 0.9) // Active color
+                                  : Color.fromRGBO(18, 18, 23, 0.3), // Grey out the color when disabled
                                   hoverColor: Color.fromRGBO(18, 18, 23, 0.6),
                                   hoverIconColor: Colors.white,
                                   icon: FaIcon(
-                                    FontAwesomeIcons.bars,
+                                    FontAwesomeIcons.arrowLeft,
                                     color: Colors.white,
                                     size: 30,
                                   ),
-                                  onPressed: () {
-                                    print('MenuButton pressed ...');
-                                  },
+                                  onPressed: _loadedProject ? () {
+                                    Navigator.pushReplacement(
+                                      context,
+                                      PageRouteBuilder(
+                                        pageBuilder: (context, animation1, animation2) => ProjectPageWidget(),
+                                        transitionDuration: Duration.zero,
+                                        reverseTransitionDuration: Duration.zero,
+                                      ),
+                                    );
+                                  } : null,
                                 ),
                                 Padding(
                                   padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
                                   child: Text(
-                                    'Menu',
+                                    'Return',
                                     textAlign: TextAlign.center,
                                     style: TextStyle(color: Colors.white),
                                   ),
