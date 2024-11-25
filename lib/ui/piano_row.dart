@@ -42,11 +42,11 @@ class _NoteWidgetState extends State<NoteWidget> {
       onTapDown: (_) {
         setState(() {
           _isPressed = true;
-          
-          if(recordingCurrently.value) {  
+
+          if (recordingCurrently.value) {
             toRecord.value = [
               ...toRecord.value,
-              [widget.note, recorder.getTimestamp(true),0]
+              [widget.note, recorder.getTimestamp(true), 0] // `duration` começa como 0
             ];
             lastRecordedIndex = toRecord.value.length - 1;
           }
@@ -56,8 +56,11 @@ class _NoteWidgetState extends State<NoteWidget> {
       onTapUp: (_) {
         setState(() {
           _isPressed = false;
-          if(recordingCurrently.value) {
-            toRecord.value[lastRecordedIndex!][2] = recorder.getTimestamp(true) - toRecord.value[lastRecordedIndex!][1];
+
+          if (recordingCurrently.value) {
+            // Atualizar o `duration` final da nota
+            toRecord.value[lastRecordedIndex!][2] =
+                recorder.getTimestamp(true) - toRecord.value[lastRecordedIndex!][1];
           }
         });
         widget.onReleased();
