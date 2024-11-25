@@ -546,7 +546,7 @@ class _PianoRowWidgetState extends State<PianoRowWidget> {
           ],
         ),
 
-        getLine(_markerPosition, screenHeight, 200),
+        (_markerPosition + 200 < 200) ? SizedBox() : getLine(_markerPosition, screenHeight, 200),
       ],
     );
   }

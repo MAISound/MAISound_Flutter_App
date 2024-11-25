@@ -598,7 +598,7 @@ class _InstrumentTracksState extends State<InstrumentTracks>{
           ],
         ),
         Container(
-          child: recorder.playOnlyTrack.value ? SizedBox() : getLine(_markerPosition, screenHeight, _isExpanded? 400 : 200,)
+          child: recorder.playOnlyTrack.value ? SizedBox() : ((_markerPosition + (_isExpanded? 400 : 200)) < (_isExpanded? 400 : 200) ? SizedBox() : getLine(_markerPosition, screenHeight, _isExpanded? 400 : 200,))
           )
       ],
     );
