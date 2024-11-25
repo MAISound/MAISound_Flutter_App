@@ -7,7 +7,9 @@ import 'package:linked_scroll_controller/linked_scroll_controller.dart';
 import 'package:maisound/classes/globals.dart';
 import 'package:maisound/classes/instrument.dart';
 import 'package:maisound/classes/track.dart';
+import 'package:maisound/home_page.dart';
 import 'package:maisound/ui/marker.dart';
+import 'package:maisound/classes/recorder.dart';
 
 class NoteWidget extends StatefulWidget {
   final String note;
@@ -33,24 +35,51 @@ class NoteWidget extends StatefulWidget {
 class _NoteWidgetState extends State<NoteWidget> {
   bool _isPressed = false;
 
+  int? lastRecordedIndex;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTapDown: (_) {
         setState(() {
           _isPressed = true;
+          print("apertou pra baixo");
+
+          if (recordingCurrently.value) {
+            toRecord.value = [
+              ...toRecord.value,
+              [widget.note, recorder.getTimestamp(true), 0, true] // "ativo" começa como true
+            ];
+            lastRecordedIndex = toRecord.value.length - 1;
+          }
         });
         widget.onPressed();
       },
       onTapUp: (_) {
+        print("soltou pra cima");
         setState(() {
           _isPressed = false;
+
+          if (recordingCurrently.value) {
+            // Atualizar o `ativo` para false ao soltar a tecla
+            toRecord.value[lastRecordedIndex!][3] = false;
+            // Atualizar o `duration` final
+            toRecord.value[lastRecordedIndex!][2] =
+                recorder.getTimestamp(true) - toRecord.value[lastRecordedIndex!][1];
+          }
         });
         widget.onReleased();
       },
       onTapCancel: () {
+        print("deu que cancelou.");
         setState(() {
           _isPressed = false;
+          if (recordingCurrently.value) {
+            // Atualizar o `ativo` para false ao cancelar
+            toRecord.value[lastRecordedIndex!][3] = false;
+            // Atualizar o `duration` final
+            toRecord.value[lastRecordedIndex!][2] =
+                recorder.getTimestamp(true) - toRecord.value[lastRecordedIndex!][1];
+          }
         });
         widget.onReleased();
       },
@@ -126,7 +155,9 @@ class _PianoRowWidgetState extends State<PianoRowWidget> {
     });
 
     _horizontalScrollController.addListener(() {
+      XScrollOffset.value = _horizontalScrollController.offset;
       setState(() {}); // Rebuild on horizontal scroll
+      _updateMarkerPosition();
     });
 
 
@@ -137,7 +168,7 @@ class _PianoRowWidgetState extends State<PianoRowWidget> {
   void _updateMarkerPosition() {
     if (mounted) {
       setState(() {
-        _markerPosition = recorder.getTimestamp(true);
+        _markerPosition = recorder.getTimestamp(true) - XScrollOffset.value;
       });
     }
   }
@@ -304,7 +335,7 @@ class _PianoRowWidgetState extends State<PianoRowWidget> {
             int noteIndex = _notes.indexWhere((n) => n.keys.first == note.noteName);
             double topPosition = (_notes.length - noteIndex - 1) * 40;
 
-
+  
             return Positioned(
               left: note.startTime - scrollbarOffsetX,
               top: topPosition - scrollbarOffsetY,

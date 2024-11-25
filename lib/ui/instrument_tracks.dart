@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:maisound/classes/globals.dart';
 import 'package:maisound/classes/instrument.dart';
@@ -42,7 +43,7 @@ class _InstrumentTracksState extends State<InstrumentTracks>{
 
   void _updateMarkerPosition(double newPosition) {
     setState(() {
-      _markerPosition = newPosition;
+      _markerPosition = newPosition - XScrollOffset.value;
     });
   }
   
@@ -68,9 +69,11 @@ class _InstrumentTracksState extends State<InstrumentTracks>{
     });
 
     _horizontalScrollController.addListener(() {
+      XScrollOffset.value = _horizontalScrollController.offset;
+      _onCurrentTimestampChanged();
       setState(() {
-        
-      });
+        //_markerPosition = recorder.getTimestamp(false) - XScrollOffset.value;
+      }); // Rebuild on horizontal scroll
     });
 
     super.initState();
@@ -364,7 +367,13 @@ class _InstrumentTracksState extends State<InstrumentTracks>{
                                         icon: Icon(Icons.close),
                                         onPressed: () {
                                           setState(() {
+                                            for(int i = 0; i < tracks.length; i++) {
+                                              if(tracks[i].instrument == instrument) {
+                                                tracks.removeAt(i);
+                                              }
+                                            }	
                                             instruments.removeAt(index);
+                                            
                                           });
                                         },
                                       ),
@@ -435,11 +444,26 @@ class _InstrumentTracksState extends State<InstrumentTracks>{
                                   // Build the track for the current instrument
                                   ...instrumentTracks.map((Track track) {
                                     double startTime = track.startTime - _horizontalScrollController.offset;
+                                    PointerDownEvent? _cachedPointerDownEvent;
+                                    print(track);
+                                    print(track.notes);
 
                                     return Positioned(
                                       left: startTime,
                                       top: 8.0,
                                       child: Listener(
+                                        
+                                        // Deleta uma track
+                                        onPointerDown: (event) {
+                                          _cachedPointerDownEvent = event;
+                                          // Lógica para tratar PointerDown
+                                          if (event.kind == PointerDeviceKind.mouse && event.buttons == kSecondaryMouseButton) {
+                                            setState(() {
+                                              tracks.remove(track);
+                                            });
+                                          }
+                                        },
+
                                         child: GestureDetector(
                                           child: Stack(
                                             children: [
@@ -476,6 +500,7 @@ class _InstrumentTracksState extends State<InstrumentTracks>{
 
                                               // Draw track notes
                                               for (var note in track.notes)
+
                                                 Positioned(
                                                   top: 30.0 +
                                                       (track.highestNoteIndex -
@@ -514,6 +539,14 @@ class _InstrumentTracksState extends State<InstrumentTracks>{
                                             });
                                           },
                                           onPanUpdate: (details) {
+                                            // Deleta um projeto
+                                            // if (_cachedPointerDownEvent != null) {
+                                            //   print(_cachedPointerDownEvent);
+                                            //   if (_cachedPointerDownEvent!.kind == PointerDeviceKind.mouse && _cachedPointerDownEvent!.buttons == kSecondaryMouseButton) {
+                                            //     return;
+                                            //   }
+                                            // }
+
                                             setState(() {
                                               double clickXPosition = details.globalPosition.dx;
 

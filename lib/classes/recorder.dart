@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:collection';
 
 import 'package:flutter/material.dart';
 import 'package:maisound/classes/globals.dart';
@@ -36,9 +37,13 @@ class Recorder {
         stop();
       }
     });
-  }
 
-  
+    recordingCurrently.addListener(() {
+      if (recordingCurrently.value) {
+        startRecording();
+      }
+    });
+  }
 
   // Caso TRUE:  retorna a posição do marcador na track atual (Tempo relativo)
   // Caso FALSE: retorna a posição do marcador no projeto (Tempo absoluto)
@@ -66,12 +71,13 @@ class Recorder {
 
   // Tocando a track... (Usado para descobrir quando uma track mudou de repente)
   Track? playingTheTrack;
-  
 
   String getElapsedTimeString() {
     int minutes = (elapsedTime.value / 60).floor();
     int seconds = (elapsedTime.value % 60).floor();
-    return minutes.toString().padLeft(2, '0') + ":" + seconds.toString().padLeft(2, '0');
+    return minutes.toString().padLeft(2, '0') +
+        ":" +
+        seconds.toString().padLeft(2, '0');
   }
 
   double getElapsedTime() {
@@ -82,38 +88,40 @@ class Recorder {
     elapsedTime.value = time;
   }
 
-
-
   void update() {
-    setElapsedTime(getElapsedTime()+1);
-    
-    // Track mudou do nada
+    setElapsedTime(getElapsedTime() + 1);
+
+    // Track changed unexpectedly
     if (playOnlyTrack.value && playingTheTrack != currentTrack) {
       stop();
       setTimestamp(0.0, true);
       play();
     }
 
-    // Atualiza a posição da timestamp na track e no projeto
-    currentTimestamp.value += (BPM / 60) * 0.5;
+    // Update the timestamp
+    currentTimestamp.value += (BPM / 60); // Adjust the increment as needed
 
-    // Toca as notas conforme o tempo passa
-    while (toPlay.isNotEmpty && currentTimestamp.value >= toPlay[0][2]) { // Use adjustedStartTime (3rd value)
-      // Remove nota que esta sendo tocada da lista de notas a serem tocadas
+    // Process a limited number of notes per frame
+    int notesProcessedThisFrame = 0;
+    final maxNotesPerFrame = 10; // Adjust this value for performance tuning
+
+    while (toPlay.isNotEmpty && currentTimestamp.value >= toPlay[0][2] && notesProcessedThisFrame < maxNotesPerFrame) {
+      print(toPlay);
       List<dynamic> nextToPlay = toPlay.removeAt(0);
       Note note = nextToPlay[0];
       int instrumentIndex = nextToPlay[1];
       double adjustedStartTime = nextToPlay[2];
-
-      // Toca a nota
+      print(instrumentIndex);
       instruments[instrumentIndex].playSound(note.noteName);
 
-      // Calcula quando deve parar de tocar e adiciona a lista de notas a serem paradas
       double stopTime = adjustedStartTime + note.duration;
-      playingNotes.add([note, instrumentIndex, stopTime]); // Store the adjusted stop time
+      playingNotes.add([note, instrumentIndex, stopTime]);
+
+      notesProcessedThisFrame++;
     }
 
-    // Pare de tocar as notas que passaram do tempo de duração
+
+    // Stop notes that have exceeded their duration
     for (int i = playingNotes.length - 1; i >= 0; i--) {
       List<dynamic> playingNote = playingNotes[i];
       Note note = playingNote[0];
@@ -126,32 +134,28 @@ class Recorder {
       }
     }
 
-    // Optionally stop when no more notes to play or stop
-    // if (toPlay.isEmpty && playingNotes.isEmpty) {
-    //   stop();
-    // }
 
-    // Terminou a track começa denovo
+    // Track looping or project end handling (unchanged)
     if (playOnlyTrack.value) {
-      if (currentTimestamp.value >= currentTrack!.startTime + currentTrack!.duration) {
-        stop();
-        setTimestamp(0, true);
-        play();
+      if (currentTrack != null) {
+        if (currentTimestamp.value >= currentTrack!.startTime + currentTrack!.duration) {
+          stop();
+          setTimestamp(0, true);
+          play();
+        }
       }
     }
-    // else{
-    //   if(currentTimestamp.value){//implementar sistema de tamanho de track normal
-    //     stop();
-    //     setTimestamp(0, false);
-    //   }
-    // }      
+
+
   }
-  
+
+
   // Começa a tocar a musica
   void play() {
     stop();
 
-    if (playOnlyTrack.value && currentTrack == null) { // VERIFICAÇÃO SE EXISTE ALGO PARA TOCAR
+    if (playOnlyTrack.value && currentTrack == null) {
+      // VERIFICAÇÃO SE EXISTE ALGO PARA TOCAR
       return;
     }
 
@@ -171,15 +175,16 @@ class Recorder {
       //   }
       // }
 
-      Track track = currentTrack!;//[0];
-      double trackStartTime = track.startTime;//[1]; // The start time for this track
+      Track track = currentTrack!; //[0];
+      double trackStartTime =
+          track.startTime; //[1]; // The start time for this track
       List<Note> notes = track.getNotes();
       int instrumentIndex = instruments.indexOf(track.instrument);
 
       // Collect all the notes from the track
       for (Note note in notes) {
         double adjustedStartTime = trackStartTime + note.startTime;
-        
+
         // Only add the notes that are not yet past the current timestamp
         if (currentTimestamp.value <= adjustedStartTime) {
           toPlay.add([note, instrumentIndex, adjustedStartTime]);
@@ -188,20 +193,21 @@ class Recorder {
 
       playingTheTrack = currentTrack;
     }
-    
+
     // Modo de tocar o projeto inteiro (multiplas tracks simultaneamente)
     if (!playOnlyTrack.value) {
       // Iterate over each track in tracks_structure
       for (var trackEntry in tracks) {
-        Track track = trackEntry;//[0];
-        double trackStartTime = trackEntry.startTime;//[1]; // The start time for this track
+        Track track = trackEntry; //[0];
+        double trackStartTime =
+            trackEntry.startTime; //[1]; // The start time for this track
         List<Note> notes = track.getNotes();
         int instrumentIndex = instruments.indexOf(track.instrument);
 
         // Collect all the notes from the track
         for (Note note in notes) {
           double adjustedStartTime = trackStartTime + note.startTime;
-          
+
           // Only add the notes that are not yet past the current timestamp
           if (currentTimestamp.value <= adjustedStartTime) {
             toPlay.add([note, instrumentIndex, adjustedStartTime]);
@@ -210,29 +216,54 @@ class Recorder {
       }
 
       // Sort the notes by their adjusted start time to ensure they are played in the correct order
-      toPlay.sort((a, b) => a[2].compareTo(b[2])); // Compare by adjustedStartTime
+      toPlay
+          .sort((a, b) => a[2].compareTo(b[2])); // Compare by adjustedStartTime
     }
 
     // Começa o update do recorder
-    _timer = Timer.periodic(Duration(milliseconds: 1), (timer) {
+    _timer = Timer.periodic(Duration(milliseconds: 16), (timer) { // ~60fps
       update();
     });
   }
 
-  void record(){
-    stop();
-    playingCurrently.value = false;
 
-    if(!inTrack){
-      return;
-    }
+  void startRecording() {
+    if (!recordingCurrently.value) return;
 
+    Timer.periodic(Duration(milliseconds: 16), (timer) {
+      if (!recordingCurrently.value) {
+        timer.cancel();
+        return;
+      }
 
-    
-    
+      currentTimestamp.value += (60 / BPM) * 1.5;
 
+      if (toRecord.value != null) {
+        for (var noteData in toRecord.value) {
+          // Atualizar apenas as notas que ainda estão ativas (pressionadas)
+          if (noteData[3] == true) {
+            noteData[2] = getTimestamp(true) - noteData[1];
 
+            // Encontre a nota em currentTrack!.notes pelo startTime e noteName
+            int index = currentTrack!.notes.indexWhere((note) =>
+                note.startTime == noteData[1] && note.noteName == noteData[0]);
 
+            if (index != -1) {
+              // Atualize a duração diretamente
+              currentTrack!.notes[index].duration = noteData[2];
+            } else {
+              // Adicione a nota se ela ainda não existir (apenas para segurança)
+              currentTrack!.addNote(Note(
+                noteName: noteData[0],
+                startTime: noteData[1],
+                duration: noteData[2],
+              ));
+              print(currentTrack!.notes);
+            }
+          }
+        }
+      }
+    });
   }
 
 
@@ -245,7 +276,5 @@ class Recorder {
     toPlay.clear();
     playingNotes.clear();
   }
-
   
-
 }

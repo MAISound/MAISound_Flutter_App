@@ -27,8 +27,25 @@ class UserService {
     }
   }
 
+  // Metodo para pegar um header com autorização
+  Future<Map<String, String>> getAuthHeader() async {
+    final token = await getToken();
+
+    return <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer $token',
+      };
+  }
+
+  // Método para recuperar o token armazenado
+  Future<String?> getToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('session'); // Retorna o token armazenado ou null
+  }
+
   // Método para fazer login
   Future<Map<String, dynamic>> loginUser(String email, String password) async {
+
   final response = await http.post(
     Uri.parse('$baseUrl/api/auth/login'),
     headers: <String, String>{
@@ -42,10 +59,11 @@ class UserService {
 
   if (response.statusCode == 200) {
     final responseData = jsonDecode(response.body);
-    final token = responseData['token']; // Supondo que o token esteja nesse campo
+    final token = responseData['session']; // Supondo que o token esteja nesse campo
+
     if (token != null) {
       final prefs = await SharedPreferences.getInstance();
-      await prefs.setString('authToken', token); // Armazena o token
+      await prefs.setString('session', token); // Armazena o token
     }
     return responseData;
   } else {
@@ -55,11 +73,10 @@ class UserService {
 
   // Método para buscar o nome do usuário atual
   Future<Map<String, dynamic>> getUser() async {
+
     final response = await http.get(
       Uri.parse('$baseUrl/api/auth/user'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
+      headers: await getAuthHeader(),
     );
 
     if (response.statusCode == 200) {
@@ -72,11 +89,10 @@ class UserService {
   }
 
   Future<bool> logout() async {
-    final response = await http.get(
+
+    final response = await http.post(
       Uri.parse('$baseUrl/api/auth/logout'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
+      headers: await getAuthHeader(),
     );
 
     if (response.statusCode == 200) {
@@ -90,9 +106,7 @@ class UserService {
   Future<bool> isAuthenticated() async {
     final response = await http.get(
       Uri.parse('$baseUrl/api/auth/'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
+      headers: await getAuthHeader(),
     );
 
     if (response.statusCode == 201) {

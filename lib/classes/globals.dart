@@ -8,6 +8,9 @@ import 'package:maisound/classes/track.dart';
 // User
 String username = "user";
 
+// Tem um projeto na memória?
+bool loadedProject = false;
+
 // Config
 String project_name = "Generic";
 String current_projectId = "Generic";
@@ -19,6 +22,8 @@ ValueNotifier<bool> playingCurrently = ValueNotifier<bool>(false);
 
 ValueNotifier<bool> recordingCurrently = ValueNotifier<bool>(false);
 
+// Scroll horizontal offset
+ValueNotifier<double> XScrollOffset = ValueNotifier<double>(0.0);
 
 double project_height = 100.0;
 
@@ -38,3 +43,8 @@ List<Track> tracks = [];
 
 // Global recorder
 final Recorder recorder = Recorder();
+
+//Notas para ser gravadas.
+ValueNotifier<List<List<dynamic>>> toRecord = ValueNotifier([]);
+Map<String, double> startTimes = {};
+
