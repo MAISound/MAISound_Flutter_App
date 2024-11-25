@@ -57,9 +57,7 @@ class _NoteWidgetState extends State<NoteWidget> {
         setState(() {
           _isPressed = false;
           if(recordingCurrently.value) {
-            final endTimeStamp = recorder.getTimestamp(true);
-            int duration = (endTimeStamp - toRecord.value[lastRecordedIndex!][1]).toInt();
-            toRecord.value[lastRecordedIndex!].add(duration);
+            toRecord.value[lastRecordedIndex!][2] = recorder.getTimestamp(true) - toRecord.value[lastRecordedIndex!][1];
           }
         });
         widget.onReleased();

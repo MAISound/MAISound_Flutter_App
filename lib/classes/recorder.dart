@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:collection';
 
 import 'package:flutter/material.dart';
 import 'package:maisound/classes/globals.dart';
@@ -220,30 +221,39 @@ class Recorder {
   } 
 
 
-  void record() {
-    while(recordingCurrently.value){
-      currentTimestamp.value += (BPM / 60) * 0.5;
-      if(toRecord.value!=null){
-        for(var noteData in toRecord.value){
+  void startRecording() {
+    // Certifique-se de que recordingCurrently.value está ativado
+    if (!recordingCurrently.value) return;
+
+    Timer.periodic(Duration(milliseconds: 50), (timer) {
+      if (!recordingCurrently.value) {
+        timer.cancel(); // Para o timer quando a gravação parar
+        return;
+      }
+
+      // Atualize o timestamp
+      currentTimestamp.value += (60 / BPM) * 0.5;
+
+      Set<String> verification = {};
+      // Grave as notas
+      if (toRecord.value != null) {
+        toRecord.value = List.from(toRecord.value); // Clonar lista para notificar alterações
+        final toProcess = List.from(toRecord.value);
+        for (var noteData in toProcess) {
           final String notename = noteData[0];
           final startTimestamp = noteData[1];
-          final duration;
-          
-          if(noteData[2]== 0){
-            duration = getTimestamp(true);
-          }
-          else{
-            duration = noteData[2];
-          }
+          final duration = noteData[2] == 0
+              ? currentTimestamp.value - startTimestamp
+              : noteData[2];
 
-          final note = Note(noteName:notename , startTime: startTimestamp,duration:duration);
+          final key = "$notename-$startTimestamp";
+
+          
+          final note = Note(noteName: notename, startTime: startTimestamp, duration: duration);
           currentTrack!.addNote(note);
-          toRecord.value.remove(noteData);
         }
       }
-      
-    }
-
+    });
   }
 
 

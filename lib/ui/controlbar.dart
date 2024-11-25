@@ -349,7 +349,7 @@ class _ControlBarWidget extends State<ControlBarWidget> {
                   recordingCurrently.value = !recordingCurrently.value;
                   print(recordingCurrently.value);
                   if(recordingCurrently.value){
-                    recorder.record();
+                    recorder.startRecording();
                     print("Entraria no método");
 
                   }
