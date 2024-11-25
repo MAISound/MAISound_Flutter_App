@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:maisound/home_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'services/user_service.dart';
 import 'cadastro_page.dart';
 
@@ -17,6 +18,7 @@ class _LoginPageState extends State<LoginPage> {
   String? _errorMessage;
 
   void _login() async {
+
     setState(() {
       _isLoading = true;
       _errorMessage = null;
@@ -35,6 +37,7 @@ class _LoginPageState extends State<LoginPage> {
 
     try {
       final token = await _userService.loginUser(email, password);
+      
       if (token != null) {
         // Login bem-sucedido, redireciona para a HomePage
         Navigator.pushReplacement(

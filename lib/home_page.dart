@@ -37,9 +37,10 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+
     fetchProjectNames();
-    checkUserStatus();
     _fetchUserName();  
+
     _scrollController = ScrollController();
   }
 
@@ -47,12 +48,17 @@ class _HomePageState extends State<HomePage> {
     // Método para buscar o nome do usuário atual
     Future<void> _fetchUserName() async {
       // Marca usuario como logado
-      isLoggedIn = await _userService.isAuthenticated();
-      final user = await _userService.getUser();
 
-      setState(() {
-        userName = user["name"];
-      });
+      try {
+        isLoggedIn = await _userService.isAuthenticated();
+        final user = await _userService.getUser();
+
+        setState(() {
+          userName = user["name"];
+        });
+      } catch(e) {
+        return;
+      }
     }
   // ----------------------------------------------------------------------------------------------
 
@@ -221,14 +227,16 @@ class _HomePageState extends State<HomePage> {
   }
 
   void fetchProjectNames() async {
-    var response = await _projectService.getProjectNames();
+    try {
+      var response = await _projectService.getProjectNames();
 
-    print(response);
-
-    projects.clear();
-    setState(() {
-      response.forEach((k, v) => projects.add([k, v]));
-    });
+      projects.clear();
+      setState(() {
+        response.forEach((k, v) => projects.add([k, v]));
+      });
+    } catch(e) {
+      return;
+    }
   }
 
   @override
@@ -279,6 +287,13 @@ class _HomePageState extends State<HomePage> {
                               userImage = null;
                             });
                             print('Logout selected');
+                          } else if (value == 3) {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => LoginPage(),
+                                ),
+                              );
                           }
                         },
                         child: Container(
@@ -328,16 +343,28 @@ class _HomePageState extends State<HomePage> {
                               ],
                             ),
                           ),
-                          PopupMenuItem<int>(
-                            value: 2,
-                            child: Row(
-                              children: [
-                                Icon(Icons.logout, color: Colors.white),  // Ícone com cor branca
-                                SizedBox(width: 10),
-                                Text('Logout', style: TextStyle(color: Colors.white)),  // Texto branco
-                              ],
+                          if (isLoggedIn)
+                            PopupMenuItem<int>(
+                              value: 2,
+                              child: Row(
+                                children: [
+                                  Icon(Icons.logout, color: Colors.white), // Icon with white color
+                                  SizedBox(width: 10),
+                                  Text('Logout', style: TextStyle(color: Colors.white)), // Text with white color
+                                ],
+                              ),
+                            )
+                          else
+                            PopupMenuItem<int>(
+                              value: 3,
+                              child: Row(
+                                children: [
+                                  Icon(Icons.login, color: Colors.white), // Icon with white color
+                                  SizedBox(width: 10),
+                                  Text('Login', style: TextStyle(color: Colors.white)), // Text with white color
+                                ],
+                              ),
                             ),
-                          ),
                         ],
                         color: Color(0xFF1D1D25),  // Cor do fundo do PopupMenuButton
                         offset: Offset(85, 0), // Posição do popup

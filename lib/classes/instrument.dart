@@ -9,6 +9,22 @@ enum InstrumentTypes {
   saxofone,
 }
 
+// Método de extensão para converter o enum em uma string
+extension InstrumentTypesExtension on InstrumentTypes {
+  String toJson() {
+    return toString().split('.').last; // Retorna apenas o nome (piano, bass, saxophone)
+  }
+}
+
+extension StringToInstrumentTypes on String {
+  InstrumentTypes toInstrumentType() {
+    return InstrumentTypes.values.firstWhere(
+      (e) => e.toString().split('.').last == this,
+      orElse: () => throw Exception("Instrument type not found"),
+    );
+  }
+}
+
 // Define the order of note letters
 List<String> noteLetterOrder = [
   "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"

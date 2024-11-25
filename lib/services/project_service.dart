@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:maisound/classes/globals.dart';
 import 'package:maisound/classes/instrument.dart';
 import 'package:maisound/classes/track.dart';
+import 'package:maisound/services/user_service.dart';
 
 // Codifica o projeto em JSON
 String stringifyProject() {
@@ -19,6 +20,7 @@ String stringifyProject() {
         "color": instrumentNew.color.toString(),
         "index": instruments.indexOf(instrumentNew),
         "volume": instrumentNew.volume,
+        "type": instrumentNew.type.toJson()
       };
       instrumentsMap.add(instrumentJson);
     });
@@ -55,7 +57,7 @@ String stringifyProject() {
 
     // Informações do projeto
     jsonFinal["name"] = project_name;
-    jsonFinal["BPM"] = BPM;
+    jsonFinal["bpm"] = BPM;
 
     // Converte jsonFinal para uma string JSON
     return jsonEncode(jsonFinal);
@@ -84,6 +86,7 @@ void loadProjectData(Map<String, dynamic> data) {
     instrument.name = instrumentData["name"];
     instrument.color = Color(int.parse(colorString)); // Converte hexadecimal para Color
     instrument.volume = instrumentData["volume"] ?? 0.5; // Define volume padrão caso não exista
+    instrument.setInstrumentType((instrumentData["type"] as String).toInstrumentType());
 
     instruments.add(instrument);
   }
@@ -132,13 +135,13 @@ class ProjectService {
   // URL base da API
   final String baseUrl = "http://localhost:5000";
 
+  UserService _userService = UserService();
+
   // Deleta um projeto usando o ID dele
   Future<void> deleteProject(String projectId) async {
     final response = await http.delete(
       Uri.parse('$baseUrl/api/auth/project/$projectId'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
+      headers: await _userService.getAuthHeader(),
     );
 
     if (response.statusCode == 200) {
@@ -153,9 +156,7 @@ class ProjectService {
   Future<Map<String, dynamic>> loadProjectById(String projectId) async {
     final response = await http.get(
       Uri.parse('$baseUrl/api/auth/project/$projectId'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
+      headers: await _userService.getAuthHeader(),
     );
 
     if (response.statusCode == 200) {
@@ -174,9 +175,7 @@ class ProjectService {
   Future<Map<String, String>> getProjectNames() async {
     final response = await http.get(
       Uri.parse('$baseUrl/api/auth/project'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
+      headers: await _userService.getAuthHeader(),
     );
 
     if (response.statusCode == 200) {
@@ -202,9 +201,7 @@ class ProjectService {
     final response = await http.post(
       Uri.parse('$baseUrl/api/auth/project'),
 
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
+      headers: await _userService.getAuthHeader(),
       body: stringifyProject(), // Converte o projeto em um json
       // body: jsonEncode(<String, String>{
       //   "prompt": prompt,
@@ -222,9 +219,7 @@ class ProjectService {
   Future<void> save(String projectId) async {
     final response = await http.put(
       Uri.parse('$baseUrl/api/auth/project/$projectId'), // Inclui o ID do projeto na URL
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
+      headers: await _userService.getAuthHeader(),
       body: stringifyProject(), // Converte o projeto em um JSON
     );
 
