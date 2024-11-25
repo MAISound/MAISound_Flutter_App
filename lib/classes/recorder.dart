@@ -134,10 +134,12 @@ class Recorder {
 
     // Terminou a track começa denovo
     if (playOnlyTrack.value) {
-      if (currentTimestamp.value >= currentTrack!.startTime + currentTrack!.duration) {
-        stop();
-        setTimestamp(0, true);
-        play();
+      if (currentTrack != null) {
+        if (currentTimestamp.value >= currentTrack!.startTime + currentTrack!.duration) {
+          stop();
+          setTimestamp(0, true);
+          play();
+        }
       }
     }
     // else{

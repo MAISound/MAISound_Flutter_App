@@ -84,6 +84,20 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  void export_project(String projectId) async {
+    try {
+      // Carrega projeto
+      await _projectService.loadProjectById(projectId);
+    } catch(e) {
+      return;
+    }
+
+    // Transforma projeto em json
+    var jsonProject = stringifyProject();
+
+    print(jsonProject);
+  }
+
   Future<void> saveUserIcon(String iconPath) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('userIconPath', iconPath);
@@ -538,8 +552,9 @@ class _HomePageState extends State<HomePage> {
                                         IconButton(
                                           icon: Icon(Icons.file_download, color: Colors.white),
                                           onPressed: () {
+                                            export_project(projects[index][0]);
                                             // Lógica para exportar o arquivo
-                                            print('Exporting project...');
+                                            //print('Exporting project...');
                                           },
                                         ),
                                         // Nome do projeto centralizado
