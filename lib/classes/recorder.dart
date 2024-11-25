@@ -253,11 +253,12 @@ class Recorder {
               currentTrack!.notes[index].duration = noteData[2];
             } else {
               // Adicione a nota se ela ainda não existir (apenas para segurança)
-              currentTrack!.notes.add(Note(
+              currentTrack!.addNote(Note(
                 noteName: noteData[0],
                 startTime: noteData[1],
                 duration: noteData[2],
               ));
+              print(currentTrack!.notes);
             }
           }
         }

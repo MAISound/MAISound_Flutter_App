@@ -436,6 +436,8 @@ class _InstrumentTracksState extends State<InstrumentTracks>{
                                   // Build the track for the current instrument
                                   ...instrumentTracks.map((Track track) {
                                     double startTime = track.startTime - _horizontalScrollController.offset;
+                                    print(track);
+                                    print(track.notes);
 
                                     return Positioned(
                                       left: startTime,
@@ -477,6 +479,7 @@ class _InstrumentTracksState extends State<InstrumentTracks>{
 
                                               // Draw track notes
                                               for (var note in track.notes)
+
                                                 Positioned(
                                                   top: 30.0 +
                                                       (track.highestNoteIndex -
