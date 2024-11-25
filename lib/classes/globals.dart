@@ -19,6 +19,8 @@ ValueNotifier<bool> playingCurrently = ValueNotifier<bool>(false);
 
 ValueNotifier<bool> recordingCurrently = ValueNotifier<bool>(false);
 
+// Scroll horizontal offset
+ValueNotifier<double> XScrollOffset = ValueNotifier<double>(0.0);
 
 double project_height = 100.0;
 

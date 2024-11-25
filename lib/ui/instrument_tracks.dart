@@ -42,7 +42,7 @@ class _InstrumentTracksState extends State<InstrumentTracks>{
 
   void _updateMarkerPosition(double newPosition) {
     setState(() {
-      _markerPosition = newPosition;
+      _markerPosition = newPosition - XScrollOffset.value;
     });
   }
   
@@ -68,9 +68,11 @@ class _InstrumentTracksState extends State<InstrumentTracks>{
     });
 
     _horizontalScrollController.addListener(() {
+      XScrollOffset.value = _horizontalScrollController.offset;
+      _onCurrentTimestampChanged();
       setState(() {
-        
-      });
+        //_markerPosition = recorder.getTimestamp(false) - XScrollOffset.value;
+      }); // Rebuild on horizontal scroll
     });
 
     super.initState();

@@ -126,7 +126,9 @@ class _PianoRowWidgetState extends State<PianoRowWidget> {
     });
 
     _horizontalScrollController.addListener(() {
+      XScrollOffset.value = _horizontalScrollController.offset;
       setState(() {}); // Rebuild on horizontal scroll
+      _updateMarkerPosition();
     });
 
 
@@ -137,7 +139,7 @@ class _PianoRowWidgetState extends State<PianoRowWidget> {
   void _updateMarkerPosition() {
     if (mounted) {
       setState(() {
-        _markerPosition = recorder.getTimestamp(true);
+        _markerPosition = recorder.getTimestamp(true) - XScrollOffset.value;
       });
     }
   }
