@@ -242,13 +242,12 @@ class Recorder {
         for (var noteData in toProcess) {
           final String notename = noteData[0];
           final startTimestamp = noteData[1];
-          final duration = noteData[2] == 0
-              ? currentTimestamp.value - startTimestamp
-              : noteData[2];
+          
+          if()
 
           final key = "$notename-$startTimestamp";
 
-          
+
           final note = Note(noteName: notename, startTime: startTimestamp, duration: duration);
           currentTrack!.addNote(note);
         }
