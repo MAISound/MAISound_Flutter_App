@@ -40,7 +40,7 @@ class _TimestampMarkerState extends State<TimestampMarker> {
 
     // Pega posição X relativa ao container
     final RenderBox box = context.findRenderObject() as RenderBox;
-    final localPosition = box.globalToLocal(details.globalPosition);
+    final localPosition = box.globalToLocal(details.globalPosition) + Offset(XScrollOffset.value, 0);;
 
     recorder.setTimestamp(localPosition.dx, widget.trackMarker);
     setState(() {
@@ -117,7 +117,7 @@ class _TimestampMarkerState extends State<TimestampMarker> {
         child: Stack(
           children: [
             Positioned(
-              left: _markerPosition - 10, // Offset na seta
+              left: _markerPosition - 10 - XScrollOffset.value, // Offset na seta
               top: 0,
               child: Icon(
                 Icons.arrow_drop_down,

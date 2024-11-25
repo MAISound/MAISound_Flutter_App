@@ -54,55 +54,51 @@ class UserService {
 }
 
   // Método para buscar o nome do usuário atual
-  Future<String> getCurrentUserName() async {
-    try {
-      // Recuperar o token do usuário logado (caso você esteja usando tokens)
-      final prefs = await SharedPreferences.getInstance();
-      final token = prefs.getString('session'); // Certifique-se de ter salvo o token ao fazer login
+  Future<Map<String, dynamic>> getUser() async {
+    final response = await http.get(
+      Uri.parse('$baseUrl/api/auth/user'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
 
-      if (token == null) {
-        throw Exception('Token de autenticação não encontrado.');
-      }
+    if (response.statusCode == 200) {
+      final user = jsonDecode(response.body);
 
-      // Chamada para o endpoint que retorna os dados do usuário atual
-      final response = await http.get(
-        Uri.parse('$baseUrl/api/user'),
-        headers: {
-          'Authorization': 'Bearer $token', // Inclua o token aqui
-          'Content-Type': 'application/json',
-        },
-      );
-      print(response.body);
-
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-        return data['name'] ?? 'Guest'; // Retorna o nome ou "Guest" se não existir
-      } else {
-        throw Exception('Erro ao buscar o nome do usuário: ${response.body}');
-      }
-    } catch (e) {
-      throw Exception('Erro ao buscar o nome do usuário: $e');
+      return user['user']; // Retorna os dados do projeto
+    } else {
+      throw Exception('Erro ao receber o projeto: ${response.body}');
     }
   }
 
-  Future<String> fetchCookie() async {
-    final url = Uri.parse('localhost:5000/auth/');
-    final response = await http.get(url);
+  Future<bool> logout() async {
+    final response = await http.get(
+      Uri.parse('$baseUrl/api/auth/logout'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
 
-    // Verifica se os cookies estão nos headers
-    if (response.headers.containsKey('set-cookie')) {
-      final cookies = response.headers['set-cookie']!;
-      // Extrai o cookie chamado "session"
-      final sessionCookie = cookies.split(';').firstWhere(
-        (cookie) => cookie.trim().startsWith('session='),
-        orElse: () => '',
-      );
-      print('Cookie session: $sessionCookie');
-      return sessionCookie;
+    if (response.statusCode == 200) {
+      return true;
     } else {
-      print('Nenhum cookie encontrado');
-      return '';
+      return false;
     }
-}
+  } 
 
+  // Método para buscar o nome do usuário atual
+  Future<bool> isAuthenticated() async {
+    final response = await http.get(
+      Uri.parse('$baseUrl/api/auth/'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
+
+    if (response.statusCode == 201) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 }

@@ -27,12 +27,12 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-    
 
 flutter:
   assets:
       - assets/instruments/piano/
       - assets/instruments/bass/
+      - assets/instruments/saxofone/
       - assets/images/
       - assets/images/default_user.png
       - assets/images/logged_user.png
