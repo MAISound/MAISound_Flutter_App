@@ -51,6 +51,7 @@ class _LoginPageState extends State<LoginPage> {
       }
     } catch (e) {
       setState(() {
+        print(e);
         _errorMessage = 'Erro ao fazer login';
       });
     } finally {
