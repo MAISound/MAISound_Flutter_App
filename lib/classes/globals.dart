@@ -38,3 +38,7 @@ List<Track> tracks = [];
 
 // Global recorder
 final Recorder recorder = Recorder();
+
+//Notas para ser gravadas.
+ValueNotifier<List<List<dynamic>>> toRecord = ValueNotifier([]);
+

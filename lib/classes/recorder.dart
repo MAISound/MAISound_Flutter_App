@@ -217,21 +217,32 @@ class Recorder {
     _timer = Timer.periodic(Duration(milliseconds: 1), (timer) {
       update();
     });
-  }
+  } 
 
-  void record(){
-    stop();
-    playingCurrently.value = false;
 
-    if(!inTrack){
-      return;
+  void record() {
+    while(recordingCurrently.value){
+      currentTimestamp.value += (BPM / 60) * 0.5;
+      if(toRecord.value!=null){
+        for(var noteData in toRecord.value){
+          final String notename = noteData[0];
+          final startTimestamp = noteData[1];
+          final duration;
+          
+          if(noteData[2]== 0){
+            duration = getTimestamp(true);
+          }
+          else{
+            duration = noteData[2];
+          }
+
+          final note = Note(noteName:notename , startTime: startTimestamp,duration:duration);
+          currentTrack!.addNote(note);
+          toRecord.value.remove(noteData);
+        }
+      }
+      
     }
-
-
-    
-    
-
-
 
   }
 
@@ -245,7 +256,4 @@ class Recorder {
     toPlay.clear();
     playingNotes.clear();
   }
-
-  
-
 }

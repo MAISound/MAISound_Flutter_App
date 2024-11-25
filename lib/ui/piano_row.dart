@@ -7,7 +7,9 @@ import 'package:linked_scroll_controller/linked_scroll_controller.dart';
 import 'package:maisound/classes/globals.dart';
 import 'package:maisound/classes/instrument.dart';
 import 'package:maisound/classes/track.dart';
+import 'package:maisound/home_page.dart';
 import 'package:maisound/ui/marker.dart';
+import 'package:maisound/classes/recorder.dart';
 
 class NoteWidget extends StatefulWidget {
   final String note;
@@ -33,18 +35,32 @@ class NoteWidget extends StatefulWidget {
 class _NoteWidgetState extends State<NoteWidget> {
   bool _isPressed = false;
 
+  int? lastRecordedIndex;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTapDown: (_) {
         setState(() {
           _isPressed = true;
+          
+          if(recordingCurrently.value) {  
+            toRecord.value = [
+              ...toRecord.value,
+              [widget.note, recorder.getTimestamp(true),0]
+            ];
+            lastRecordedIndex = toRecord.value.length - 1;
+          }
         });
         widget.onPressed();
       },
       onTapUp: (_) {
         setState(() {
           _isPressed = false;
+          if(recordingCurrently.value) {
+            final endTimeStamp = recorder.getTimestamp(true);
+            int duration = (endTimeStamp - toRecord.value[lastRecordedIndex!][1]).toInt();
+            toRecord.value[lastRecordedIndex!].add(duration);
+          }
         });
         widget.onReleased();
       },
@@ -303,7 +319,7 @@ class _PianoRowWidgetState extends State<PianoRowWidget> {
             int noteIndex = _notes.indexWhere((n) => n.keys.first == note.noteName);
             double topPosition = (_notes.length - noteIndex - 1) * 40;
 
-
+  
             return Positioned(
               left: note.startTime - scrollbarOffsetX,
               top: topPosition - scrollbarOffsetY,

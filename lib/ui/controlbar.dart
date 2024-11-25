@@ -311,12 +311,7 @@ class _ControlBarWidget extends State<ControlBarWidget> {
                         recorder.stop();
                       });
                     }
-
-                    if(recordingCurrently.value) {
-                      setState(() {
-                        recordingCurrently.value = false;
-                      });
-                    }
+                    //se apertar rewind enquanto grava
                   },
                 ),
 
@@ -349,8 +344,15 @@ class _ControlBarWidget extends State<ControlBarWidget> {
                   ? const Icon(Icons.square, color: Colors.white, size: 20)
                   : const Icon(Icons.fiber_manual_record, color: Colors.white, size: 24),
               onPressed: () {
+                print(recordingCurrently.value);
                 setState(() {
                   recordingCurrently.value = !recordingCurrently.value;
+                  print(recordingCurrently.value);
+                  if(recordingCurrently.value){
+                    recorder.record();
+                    print("Entraria no método");
+
+                  }
                 });
               },
             ),
