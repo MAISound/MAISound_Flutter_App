@@ -130,10 +130,12 @@ class Recorder {
 
     // Track looping or project end handling (unchanged)
     if (playOnlyTrack.value) {
-      if (currentTimestamp.value >= currentTrack!.startTime + currentTrack!.duration) {
-        stop();
-        setTimestamp(0, true);
-        play();
+      if (currentTrack != null) {
+        if (currentTimestamp.value >= currentTrack!.startTime + currentTrack!.duration) {
+          stop();
+          setTimestamp(0, true);
+          play();
+        }
       }
     }
 
