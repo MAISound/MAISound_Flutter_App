@@ -99,7 +99,7 @@ class Recorder {
     }
 
     // Update the timestamp
-    currentTimestamp.value += (BPM / 60); // Adjust the increment as needed
+    currentTimestamp.value += (BPM / 60) ; // Adjust the increment as needed
 
     // Process a limited number of notes per frame
     int notesProcessedThisFrame = 0;
@@ -236,7 +236,7 @@ class Recorder {
         return;
       }
 
-      currentTimestamp.value += (60 / BPM) * 1.5;
+      currentTimestamp.value += (60 / BPM) * 1.9;
 
       if (toRecord.value != null) {
         for (var noteData in toRecord.value) {
