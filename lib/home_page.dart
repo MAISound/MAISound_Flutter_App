@@ -518,6 +518,7 @@ class _HomePageState extends State<HomePage> {
                             setState(() {
                               isLoggedIn = false;
                               userImage = null;
+                              projects.clear();
                             });
                             print('Logout selected');
                           } else if (value == 3) {

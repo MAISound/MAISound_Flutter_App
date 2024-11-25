@@ -3,6 +3,7 @@ import 'package:maisound/track_page.dart';
 import 'package:maisound/ui/controlbar.dart';
 import 'package:maisound/ui/instrument_tracks.dart';
 import 'package:maisound/ui/marker.dart';
+import 'package:universal_html/html.dart' as html;
 
 class ProjectPageWidget extends StatefulWidget {
   const ProjectPageWidget({super.key, projectName});
@@ -13,6 +14,17 @@ class ProjectPageWidget extends StatefulWidget {
 
 class _ProjectPageWidgetState extends State<ProjectPageWidget> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
+
+  @override
+  void initState() {
+    super.initState();
+
+    //recorder.setTrack(track);
+    // Prevent default event handler
+    html.document.onContextMenu.listen((event) {
+      event.preventDefault(); // Impede o menu de contexto de ser exibido
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

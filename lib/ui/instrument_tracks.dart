@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:maisound/classes/globals.dart';
 import 'package:maisound/classes/instrument.dart';
@@ -436,6 +437,7 @@ class _InstrumentTracksState extends State<InstrumentTracks>{
                                   // Build the track for the current instrument
                                   ...instrumentTracks.map((Track track) {
                                     double startTime = track.startTime - _horizontalScrollController.offset;
+                                    PointerDownEvent? _cachedPointerDownEvent;
                                     print(track);
                                     print(track.notes);
 
@@ -443,6 +445,18 @@ class _InstrumentTracksState extends State<InstrumentTracks>{
                                       left: startTime,
                                       top: 8.0,
                                       child: Listener(
+                                        
+                                        // Deleta uma track
+                                        onPointerDown: (event) {
+                                          _cachedPointerDownEvent = event;
+                                          // Lógica para tratar PointerDown
+                                          if (event.kind == PointerDeviceKind.mouse && event.buttons == kSecondaryMouseButton) {
+                                            setState(() {
+                                              tracks.remove(track);
+                                            });
+                                          }
+                                        },
+
                                         child: GestureDetector(
                                           child: Stack(
                                             children: [
@@ -518,6 +532,14 @@ class _InstrumentTracksState extends State<InstrumentTracks>{
                                             });
                                           },
                                           onPanUpdate: (details) {
+                                            // Deleta um projeto
+                                            // if (_cachedPointerDownEvent != null) {
+                                            //   print(_cachedPointerDownEvent);
+                                            //   if (_cachedPointerDownEvent!.kind == PointerDeviceKind.mouse && _cachedPointerDownEvent!.buttons == kSecondaryMouseButton) {
+                                            //     return;
+                                            //   }
+                                            // }
+
                                             setState(() {
                                               double clickXPosition = details.globalPosition.dx;
 
