@@ -33,6 +33,8 @@ flutter:
       - assets/instruments/piano/
       - assets/instruments/bass/
       - assets/instruments/saxofone/
+      - assets/instruments/arpa/
+      - assets/instruments/guitarra/
       - assets/images/
       - assets/images/default_user.png
       - assets/images/logged_user.png

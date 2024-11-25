@@ -17,7 +17,7 @@ class _InstrumentTracksState extends State<InstrumentTracks>{
   double? initialMouseOffsetX;
   double snapStep = 64;
 
-  List<String> availableInstruments = ["Piano", "Bass", "Saxofone"];
+  List<String> availableInstruments = ["Piano", "Bass", "Saxofone", "Arpa", "Guitarra"];
 
   bool _isExpanded = true;
 
@@ -301,6 +301,13 @@ class _InstrumentTracksState extends State<InstrumentTracks>{
                                                                   if (availableInstrument == "Saxofone") {
                                                                     instrument.setInstrumentType(InstrumentTypes.saxofone);
                                                                   }
+                                                                  if (availableInstrument == "Arpa") {
+                                                                    instrument.setInstrumentType(InstrumentTypes.arpa);
+                                                                  }
+                                                                  if (availableInstrument == "Guitarra") {
+                                                                    instrument.setInstrumentType(InstrumentTypes.guitarra);
+                                                                  }
+                                                                  
                                                                 });
                                                                 Navigator.pop(context);  // Close the bottom sheet after selection
                                                               },

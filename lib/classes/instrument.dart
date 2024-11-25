@@ -7,6 +7,8 @@ enum InstrumentTypes {
   piano,
   bass,
   saxofone,
+  arpa,
+  guitarra,
 }
 
 // Define the order of note letters
@@ -83,16 +85,25 @@ class Instrument {
   void setInstrumentType(InstrumentTypes type) {
     if (type == InstrumentTypes.bass) {
       name = "Bass";
-      color = Color.fromARGB(255, 233, 38, 38);
+      color = Color.fromARGB(255, 255, 56, 56);
     }
     if (type == InstrumentTypes.piano) {
       name = "Piano";
-      color = Color.fromARGB(255, 60, 104, 248);
+      color = Color.fromARGB(255, 59, 105, 255);
     }
     if (type == InstrumentTypes.saxofone){
       name = "Saxofone";
-      color = Color.fromARGB(255, 20, 252, 78);
+      color = Color.fromARGB(255, 48, 255, 100);
     }
+    if (type == InstrumentTypes.arpa){
+      name = "arpa";
+      color = Color.fromARGB(255, 252, 255, 70);
+    }
+    if (type == InstrumentTypes.guitarra){
+      name = "guitarra";
+      color = Color.fromARGB(255, 196, 41, 243);
+    }
+
 
     this.type = type;
 
@@ -225,6 +236,14 @@ class Instrument {
     if (type == InstrumentTypes.saxofone) {
       octaves = [3, 4, 5];
       soundPath = "saxofone";
+    }
+    if (type == InstrumentTypes.arpa) {
+      octaves = [3, 4, 5];
+      soundPath = "arpa";
+    }
+    if (type == InstrumentTypes.guitarra){
+      octaves = [3, 4, 5];
+      soundPath = "guitarra";
     }
 
 
