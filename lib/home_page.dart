@@ -623,7 +623,7 @@ class _HomePageState extends State<HomePage> {
                                   borderRadius: 20,
                                   borderWidth: 1,
                                   buttonSize: 80,
-                                  fillColor: _loadedProject
+                                  fillColor: _loadedProject && isLoggedIn
                                   ? Color.fromRGBO(18, 18, 23, 0.9) // Active color
                                   : Color.fromRGBO(18, 18, 23, 0.3), // Grey out the color when disabled
                                   hoverColor: Color.fromRGBO(18, 18, 23, 0.6),
@@ -633,7 +633,7 @@ class _HomePageState extends State<HomePage> {
                                     color: Colors.white,
                                     size: 30,
                                   ),
-                                  onPressed: _loadedProject ? () {
+                                  onPressed: (_loadedProject && isLoggedIn) ? () {
                                     Navigator.pushReplacement(
                                       context,
                                       PageRouteBuilder(
@@ -662,7 +662,10 @@ class _HomePageState extends State<HomePage> {
                                   borderRadius: 20,
                                   borderWidth: 1,
                                   buttonSize: 80,
-                                  fillColor: Color.fromRGBO(18, 18, 23, 0.9),
+                                  fillColor: isLoggedIn
+                                  ? Color.fromRGBO(18, 18, 23, 0.9) // Active color
+                                  : Color.fromRGBO(18, 18, 23, 0.3),
+                                  //fillColor: Color.fromRGBO(18, 18, 23, 0.9),
                                   hoverColor: Color.fromRGBO(18, 18, 23, 0.6),
                                   hoverIconColor: Colors.white,
                                   icon: FaIcon(
@@ -670,11 +673,11 @@ class _HomePageState extends State<HomePage> {
                                     color: Colors.white,
                                     size: 30,
                                   ),
-                                  onPressed: () {
+                                  onPressed: (isLoggedIn) ? () {
                                     setState(() {
                                       _showAddProjectDialog();
                                     });
-                                  },
+                                  } : null,
                                 ),
                                 Padding(
                                   padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
@@ -694,7 +697,9 @@ class _HomePageState extends State<HomePage> {
                                   borderRadius: 20,
                                   borderWidth: 1,
                                   buttonSize: 80,
-                                  fillColor: Color.fromRGBO(18, 18, 23, 0.9),
+                                  fillColor: isLoggedIn
+                                  ? Color.fromRGBO(18, 18, 23, 0.9) // Active color
+                                  : Color.fromRGBO(18, 18, 23, 0.3),
                                   hoverColor: Color.fromRGBO(18, 18, 23, 0.6),
                                   hoverIconColor: Colors.white,
                                   icon: Icon(
@@ -702,9 +707,9 @@ class _HomePageState extends State<HomePage> {
                                     color: Colors.white,
                                     size: 30,
                                   ),
-                                  onPressed: () {
+                                  onPressed: (isLoggedIn) ? () {
                                     loadProjectFromFile();
-                                  },
+                                  } : null,
                                 ),
                                 Padding(
                                   padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
