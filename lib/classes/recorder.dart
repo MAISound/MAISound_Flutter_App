@@ -117,11 +117,11 @@ class Recorder {
     // Stop notes that have exceeded their duration
     for (int i = playingNotes.length - 1; i >= 0; i--) {
       List<dynamic> playingNote = playingNotes[i];
+      Note note = playingNote[0];
+      int instrumentIndex = playingNote[1];
       double stopTime = playingNote[2];
 
       if (currentTimestamp.value >= stopTime) {
-        Note note = playingNote[0];
-        int instrumentIndex = playingNote[1];
         instruments[instrumentIndex].stopSound(note.noteName);
         playingNotes.removeAt(i);
       }
@@ -220,31 +220,36 @@ class Recorder {
   }
 
   void startRecording() {
-    // Certifique-se de que recordingCurrently.value está ativado
     if (!recordingCurrently.value) return;
 
-    Timer.periodic(Duration(milliseconds: 50), (timer) {
+    Timer.periodic(Duration(milliseconds: 32), (timer) {
       if (!recordingCurrently.value) {
-        timer.cancel(); // Para o timer quando a gravação parar
+        timer.cancel();
         return;
       }
 
-      // Atualize o timestamp
       currentTimestamp.value += (60 / BPM);
 
       if (toRecord.value != null) {
-        // Atualizar o duration das notas que ainda não tiveram o `onTapUp`
         for (var noteData in toRecord.value) {
+          // Atualizar a duração CONTINUAMENTE enquanto noteData[2] for 0 (pressionado)
           if (noteData[2] == 0) {
-            // Se `duration` ainda não foi definido
             noteData[2] = currentTimestamp.value - noteData[1];
 
-            // Atualizar a duração da nota diretamente em `currentTrack!.notes`
-            if (currentTrack!.notes.contains(Note(noteName: noteData[0],startTime: noteData[1],duration: 0,))){
-              currentTrack!.notes[currentTrack!.notes.indexOf(Note(noteName: noteData[0],startTime: noteData[1],duration: 0,))].duration = noteData[2];
-            }
-            else{
-              currentTrack!.notes.add(Note(noteName: noteData[0],startTime: noteData[1],duration: noteData[2],));
+            // Encontre a nota em currentTrack!.notes pelo startTime e noteName
+            int index = currentTrack!.notes.indexWhere((note) =>
+                note.startTime == noteData[1] && note.noteName == noteData[0]);
+
+            if (index != -1) {
+              // Atualize a duração diretamente
+              currentTrack!.notes[index].duration = noteData[2];
+            } else {
+              // Adicione a nota se ela ainda não existir (apenas para segurança)
+              currentTrack!.notes.add(Note(
+                noteName: noteData[0],
+                startTime: noteData[1],
+                duration: noteData[2],
+              ));
             }
           }
         }
