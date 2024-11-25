@@ -285,7 +285,7 @@ class _HomePageState extends State<HomePage> {
                           width: 80,
                           height: 80,
                           decoration: BoxDecoration(
-                            color: Color.fromRGBO(18, 18, 23, 0.9),
+                            color: Color.fromRGBO(18, 18, 23, 0.9),  // Cor de fundo igual à do popup
                             shape: BoxShape.circle,
                           ),
                           child: Center(
@@ -310,7 +310,10 @@ class _HomePageState extends State<HomePage> {
                             value: 0,
                             child: Text(
                               'User: ${isLoggedIn ? userName : "Guest"}',
-                              style: TextStyle(fontWeight: FontWeight.bold),
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,  // Cor do texto igual ao do popup
+                              ),
                             ),
                             enabled: false,
                           ),
@@ -319,9 +322,9 @@ class _HomePageState extends State<HomePage> {
                             value: 1,
                             child: Row(
                               children: [
-                                Icon(Icons.image, color: Colors.black),
+                                Icon(Icons.image, color: Colors.white),  // Ícone com cor branca
                                 SizedBox(width: 10),
-                                Text('Change Icon'),
+                                Text('Change Icon', style: TextStyle(color: Colors.white)),  // Texto branco
                               ],
                             ),
                           ),
@@ -329,13 +332,15 @@ class _HomePageState extends State<HomePage> {
                             value: 2,
                             child: Row(
                               children: [
-                                Icon(Icons.logout, color: Colors.black),
+                                Icon(Icons.logout, color: Colors.white),  // Ícone com cor branca
                                 SizedBox(width: 10),
-                                Text('Logout'),
+                                Text('Logout', style: TextStyle(color: Colors.white)),  // Texto branco
                               ],
                             ),
                           ),
                         ],
+                        color: Color(0xFF1D1D25),  // Cor do fundo do PopupMenuButton
+                        offset: Offset(85, 0), // Posição do popup
                       ),
                     ),
                   ),
@@ -494,26 +499,59 @@ class _HomePageState extends State<HomePage> {
                                 color: Color(0xFF14141C),
                                 borderRadius: BorderRadius.circular(20),
                               ),
-                              child: Stack(
+                              child: Column(
                                 children: [
-                                  Center(
-                                    child: Text(
-                                      projects[index][1],
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 20,
-                                      ),
-                                      textAlign: TextAlign.center,
+                                  // Parte superior com o nome do projeto e ícones
+                                  Container(
+                                    padding: EdgeInsets.all(8),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        // Ícone para exportar o arquivo
+                                        IconButton(
+                                          icon: Icon(Icons.file_download, color: Colors.white),
+                                          onPressed: () {
+                                            // Lógica para exportar o arquivo
+                                            print('Exporting project...');
+                                          },
+                                        ),
+                                        // Nome do projeto centralizado
+                                        Expanded(
+                                          child: Center(
+                                            child: Text(
+                                              projects[index][1],
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 20,
+                                              ),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          ),
+                                        ),
+                                        // Ícone para deletar o projeto
+                                        IconButton(
+                                          icon: Icon(Icons.delete, color: Colors.red),
+                                          onPressed: () {
+                                            _showDeleteConfirmationDialog(index);
+                                          },
+                                        ),
+                                      ],
                                     ),
                                   ),
-                                  Positioned(
-                                    top: 14,
-                                    right: 14,
-                                    child: IconButton(
-                                      icon: Icon(Icons.delete, color: Colors.red),
-                                      onPressed: () {
-                                        _showDeleteConfirmationDialog(index);
-                                      },
+                                  
+                                  // Linha de separação entre o topo e o futuro espaço da imagem
+                                  Container(
+                                    height: 1,  // Espessura da linha
+                                    color: Colors.white, // Cor da linha de separação
+                                  ),
+                                  
+                                  // Parte inferior para a imagem ou conteúdo adicional no futuro
+                                  Expanded(
+                                    child: Center(
+                                      child: Image.asset(
+                                        'assets/images/default_project.png',
+                                      fit: BoxFit.cover,
+                                      ),
                                     ),
                                   ),
                                 ],
