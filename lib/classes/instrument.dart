@@ -83,15 +83,15 @@ class Instrument {
   void setInstrumentType(InstrumentTypes type) {
     if (type == InstrumentTypes.bass) {
       name = "Bass";
-      color = Color.fromARGB(255, 218, 123, 47);
+      color = Color.fromARGB(255, 233, 38, 38);
     }
     if (type == InstrumentTypes.piano) {
       name = "Piano";
       color = Color.fromARGB(255, 60, 104, 248);
     }
-    if (type == InstrumentTypes.bass){
+    if (type == InstrumentTypes.saxofone){
       name = "Saxofone";
-      color = Color.fromARGB(255, 60, 104, 248);
+      color = Color.fromARGB(255, 20, 252, 78);
     }
 
     this.type = type;
@@ -219,6 +219,7 @@ class Instrument {
       soundPath = "piano";
     }
     if (type == InstrumentTypes.bass) {
+      octaves = [4, 5, 6];
       soundPath = "bass";
     }
     if (type == InstrumentTypes.saxofone) {
